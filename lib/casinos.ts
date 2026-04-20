@@ -19,6 +19,8 @@ export interface CasinoReview {
   affiliateUrl: string;
   affiliateCta: string;
   author: { name: string; initials: string };
+  publishDate: string | null;
+  lastUpdated: string | null;
   updated: string;
   readTime: string;
   faq: { question: string; answer: string }[];
@@ -117,6 +119,8 @@ export async function getCasinoReviewBySlug(slug: string): Promise<CasinoReview 
       name: authorRow?.name || "BonusCheckr Team",
       initials: authorRow?.initials || "BC",
     },
+    publishDate: row.publish_date,
+    lastUpdated: row.last_updated,
     updated: formatUpdated(row.last_updated || row.publish_date),
     readTime: computeReadTime(row.content),
     faq,

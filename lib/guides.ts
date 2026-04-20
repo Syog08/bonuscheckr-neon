@@ -6,9 +6,12 @@ export interface Guide {
   title: string;
   meta_title: string;
   meta_description: string;
+  description: string | null;
+  publish_date: string | null;
+  last_updated: string | null;
   tldr: string;
   content: string;
-  author: { name: string; initials: string };
+  author: { name: string; initials: string; expertise: string | null };
   updated: string;
   readTime: string;
   faq: { question: string; answer: string }[];
@@ -112,11 +115,15 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
     title: row.title,
     meta_title: row.meta_title || row.title,
     meta_description: row.meta_description || row.description || "",
+    description: row.description,
+    publish_date: row.publish_date,
+    last_updated: row.last_updated,
     tldr,
     content: body,
     author: {
       name: authorRow?.name || "BonusCheckr Team",
       initials: authorRow?.initials || "BC",
+      expertise: authorRow?.expertise ?? null,
     },
     updated: formatUpdated(row.last_updated || row.publish_date),
     readTime: computeReadTime(row.word_count),
