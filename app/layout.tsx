@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: {
     default: "BonusCheckr — Is that casino bonus actually worth claiming?",
-    template: "%s — BonusCheckr",
+    template: "%s",
   },
   description:
     "Paste casino bonus terms or drop a screenshot. Get an instant EV-based verdict before you deposit. Built for crypto casino players.",
