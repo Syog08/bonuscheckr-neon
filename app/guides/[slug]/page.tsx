@@ -6,7 +6,14 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import MidArticleCTA from "@/components/MidArticleCTA";
 import FAQBlock from "@/components/FAQBlock";
 import RelatedGuides from "@/components/RelatedGuides";
-import { getGuideBySlug } from "@/lib/guides";
+import { getGuideBySlug, getAllGuideSlugs } from "@/lib/guides";
+
+export async function generateStaticParams() {
+  const slugs = await getAllGuideSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
+
+export const dynamicParams = false;
 
 export async function generateMetadata({
   params,
@@ -14,7 +21,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const guide = getGuideBySlug(slug);
+  const guide = await getGuideBySlug(slug);
   if (!guide) return {};
   const url = `https://bonuscheckr.com/guides/${guide.slug}`;
   return {
@@ -41,7 +48,7 @@ export default async function GuidePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const guide = getGuideBySlug(slug);
+  const guide = await getGuideBySlug(slug);
   if (!guide) notFound();
 
   const articleJsonLd = {

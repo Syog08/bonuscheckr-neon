@@ -1,13 +1,13 @@
-// Temporary hardcoded guide content for preview/review.
-// Replaced by Supabase query in the content migration step.
+import { supabase, type GuideRow, type AuthorRow } from "./supabase";
 
+// Shape expected by the existing guide page template
 export interface Guide {
   slug: string;
   title: string;
   meta_title: string;
   meta_description: string;
   tldr: string;
-  content: string; // markdown body (no H1)
+  content: string;
   author: { name: string; initials: string };
   updated: string;
   readTime: string;
@@ -15,107 +15,139 @@ export interface Guide {
   related: { slug: string; title: string; blurb: string; readTime: string }[];
 }
 
-const sampleGuide: Guide = {
-  slug: "sticky-vs-non-sticky-bonuses",
-  title: "Sticky vs non-sticky casino bonuses explained",
-  meta_title:
-    "Sticky vs non-sticky bonuses — which is worth claiming?",
-  meta_description:
-    "Non-sticky keeps your deposit safe. Sticky merges everything. Here's how to tell them apart in 30 seconds and why it matters for your bankroll.",
-  tldr: "Non-sticky bonuses keep your deposit separate from bonus money — you can withdraw real wins without completing wagering. Sticky bonuses merge them, so nothing comes out until wagering is cleared. **Non-sticky is almost always the better deal.** Terms rarely spell out which type you're getting, so check the language before depositing.",
-  author: { name: "Max Veld", initials: "MV" },
-  updated: "Updated 12 Apr 2026",
-  readTime: "8 min read",
-  content: `Almost every casino bonus is one of two types. The difference decides whether the bonus is usable, whether you can walk away with winnings, and whether claiming it made sense in the first place. Most players don't know which type they're getting — the terms rarely say it in plain language.
-
-This guide covers both, shows what happens to your money in each case, and gives you a 30-second test to tell which type a bonus is before you deposit.
-
-## The core difference
-
-It comes down to how the casino treats your deposit versus the bonus amount. With a non-sticky bonus, your **deposit and bonus live in separate wallets**. The deposit is real money you can withdraw any time. With a sticky bonus, deposit and bonus are **merged into a single balance** and neither can leave the casino until wagering is complete.
-
-| | Non-sticky | Sticky |
-| --- | --- | --- |
-| Deposit + bonus | Separate wallets | Merged |
-| Withdraw real wins | Any time | After WR only |
-| Bonus if you cash out early | Forfeit | Forfeit + can lose deposit |
-| Risk profile | Low | High |
-| Expected value to player | Positive | Variable |
-
-## Worked example
-
-You deposit \`0.1 BTC\` and claim a \`100%\` match bonus. Total balance: \`0.2 BTC\`. Wagering is \`40×\` the bonus, meaning \`4 BTC\` of turnover before cashout.
-
-### Non-sticky path
-
-- You play. Balance grows to \`0.25 BTC\`.
-- You cash out. Casino forfeits the unused bonus. You keep **0.15 BTC** — your deposit plus winnings.
-- No wagering completed. No forced loss. You walked away ahead.
-
-### Sticky path
-
-- Same start. Balance grows to \`0.25 BTC\`.
-- You try to cash out. **Blocked.** Wagering not complete.
-- You grind toward \`4 BTC\` turnover. Variance eats the balance before you get there.
-
-## How to tell which type you're getting
-
-- Look for the word **"non-sticky"**, **"parachute"** or **"cashable bonus"** in the terms. If present, you're safe.
-- Check if the terms mention "deposit and bonus must be wagered together" or "bonus balance" as a single figure — sticky.
-- If the terms are silent, assume sticky. Casinos make non-sticky explicit because it's a selling point.
-- Look at the withdraw button behaviour before you start playing — if it's disabled with an active bonus, that's sticky.`,
-  faq: [
-    {
-      question: "Are non-sticky bonuses always better?",
-      answer:
-        "For most players, yes. Non-sticky lets you cash out early if you get lucky, which sticky doesn't. The exception: a sticky bonus with genuinely low wagering (10× or below) and generous max cashout can outperform a non-sticky with 40× wagering. Rare but possible.",
-    },
-    {
-      question: "What happens to my deposit if I cash out a non-sticky bonus early?",
-      answer:
-        "Your deposit stays yours. You withdraw the deposit plus any real-money winnings. The bonus is forfeited — which is the correct move 90% of the time with non-sticky offers.",
-    },
-    {
-      question: "Can a casino change a bonus from non-sticky to sticky after I deposit?",
-      answer:
-        "No legit casino will. But the T&Cs at time of claim are what govern — so always screenshot the terms before you deposit, especially at smaller or offshore operators. If the terms change mid-play, that's a complaint you can escalate.",
-    },
-  ],
-  related: [
-    {
-      slug: "non-sticky-withdrawal-guide",
-      title: "Non-sticky withdrawal walkthrough",
-      blurb: "Step-by-step from deposit to cashout",
-      readTime: "7 min",
-    },
-    {
-      slug: "casino-bonus-wagering-requirements",
-      title: "Wagering requirements explained",
-      blurb: "How 40× actually plays out in practice",
-      readTime: "6 min",
-    },
-    {
-      slug: "red-flags-bonus-terms",
-      title: "Top 5 red flags in bonus terms",
-      blurb: "Max bet traps, exclusions, time limits",
-      readTime: "7 min",
-    },
-    {
-      slug: "how-to-cancel-casino-bonus",
-      title: "How to cancel a casino bonus",
-      blurb: "When walking away beats playing through",
-      readTime: "5 min",
-    },
-  ],
-};
-
-export function getGuideBySlug(slug: string): Guide | null {
-  // Only serves the one sample for preview — all 16 guides wire in at migration.
-  if (slug === sampleGuide.slug) return sampleGuide;
-  // Return the sample for any slug so preview/review works for every link
-  return { ...sampleGuide, slug };
+// Format date as "Updated 12 Apr 2026"
+function formatUpdated(iso: string | null): string {
+  if (!iso) return "Recently updated";
+  const d = new Date(iso);
+  const month = d.toLocaleString("en-US", { month: "short" });
+  return `Updated ${d.getDate()} ${month} ${d.getFullYear()}`;
 }
 
-export function getAllGuideSlugs(): string[] {
-  return [sampleGuide.slug];
+// Rough read time: 200 wpm average, minimum 3 min
+function computeReadTime(wordCount: number | null): string {
+  if (!wordCount) return "5 min read";
+  const min = Math.max(3, Math.round(wordCount / 200));
+  return `${min} min read`;
+}
+
+// Extract FAQ section from markdown — looks for ## FAQ with ### subheadings.
+// Returns the FAQ items AND the content with the FAQ section stripped.
+function extractFAQ(content: string): {
+  body: string;
+  faq: { question: string; answer: string }[];
+} {
+  const faqRegex = /\n##\s+(?:FAQ|Frequently Asked Questions|FAQs)\s*\n([\s\S]*?)(?=\n##\s+|$)/i;
+  const match = content.match(faqRegex);
+  if (!match) return { body: content, faq: [] };
+
+  const faqBlock = match[1];
+  const faq: { question: string; answer: string }[] = [];
+  const qRegex = /###\s+([^\n]+)\n([\s\S]*?)(?=\n###\s+|$)/g;
+  let m;
+  while ((m = qRegex.exec(faqBlock)) !== null) {
+    faq.push({
+      question: m[1].trim(),
+      answer: m[2].trim(),
+    });
+  }
+
+  const body = content.replace(faqRegex, "").trim();
+  return { body, faq };
+}
+
+// Very simple TL;DR extractor: if guide has a ">" blockquote near top that starts
+// with "TL;DR:", use it. Otherwise use the description field or first paragraph.
+function extractTLDR(content: string, description: string | null): string {
+  const tldrMatch = content.match(/>\s*\*\*TL;DR[:\s]*\*\*([^\n]+(?:\n[^\n>]+)*)/i);
+  if (tldrMatch) return tldrMatch[1].trim();
+
+  if (description && description.length > 50) return description;
+
+  // Fall back to first sentence of content
+  const firstPara = content.split("\n\n").find((p) => p.trim() && !p.startsWith("#"));
+  if (firstPara) return firstPara.trim().substring(0, 400);
+  return description || "";
+}
+
+export async function getGuideBySlug(slug: string): Promise<Guide | null> {
+  const { data: guide, error } = await supabase
+    .from("guides")
+    .select("*")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .eq("noindex", false)
+    .maybeSingle();
+
+  if (error || !guide) return null;
+
+  const { data: author } = await supabase
+    .from("authors")
+    .select("*")
+    .eq("id", guide.author_id)
+    .maybeSingle();
+
+  const row = guide as GuideRow;
+  const authorRow = author as AuthorRow | null;
+  const { body, faq } = extractFAQ(row.content);
+  const tldr = extractTLDR(body, row.description);
+
+  // Load 4 related guides (same primary_topic, else most recent)
+  const { data: relatedRows } = await supabase
+    .from("guides")
+    .select("slug, title, description, word_count")
+    .eq("status", "published")
+    .eq("noindex", false)
+    .neq("slug", slug)
+    .limit(4);
+
+  const related = (relatedRows || []).map((r: { slug: string; title: string; description: string | null; word_count: number | null }) => ({
+    slug: r.slug,
+    title: r.title,
+    blurb: r.description || "",
+    readTime: computeReadTime(r.word_count),
+  }));
+
+  return {
+    slug: row.slug,
+    title: row.title,
+    meta_title: row.meta_title || row.title,
+    meta_description: row.meta_description || row.description || "",
+    tldr,
+    content: body,
+    author: {
+      name: authorRow?.name || "BonusCheckr Team",
+      initials: authorRow?.initials || "BC",
+    },
+    updated: formatUpdated(row.last_updated || row.publish_date),
+    readTime: computeReadTime(row.word_count),
+    faq,
+    related,
+  };
+}
+
+export async function getAllGuides(): Promise<
+  { slug: string; title: string; description: string; readTime: string }[]
+> {
+  const { data } = await supabase
+    .from("guides")
+    .select("slug, title, description, word_count, publish_date")
+    .eq("status", "published")
+    .eq("noindex", false)
+    .order("publish_date", { ascending: false });
+
+  return (data || []).map((r: { slug: string; title: string; description: string | null; word_count: number | null }) => ({
+    slug: r.slug,
+    title: r.title,
+    description: r.description || "",
+    readTime: computeReadTime(r.word_count),
+  }));
+}
+
+export async function getAllGuideSlugs(): Promise<string[]> {
+  const { data } = await supabase
+    .from("guides")
+    .select("slug")
+    .eq("status", "published")
+    .eq("noindex", false);
+  return (data || []).map((r: { slug: string }) => r.slug);
 }

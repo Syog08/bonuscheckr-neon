@@ -9,7 +9,14 @@ import MidArticleCTA from "@/components/MidArticleCTA";
 import FAQBlock from "@/components/FAQBlock";
 import StickyAffiliateCTA from "@/components/StickyAffiliateCTA";
 import Link from "next/link";
-import { getCasinoReviewBySlug } from "@/lib/casinos";
+import { getCasinoReviewBySlug, getAllCasinoReviewSlugs } from "@/lib/casinos";
+
+export async function generateStaticParams() {
+  const slugs = await getAllCasinoReviewSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
+
+export const dynamicParams = false;
 
 export async function generateMetadata({
   params,
@@ -17,7 +24,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const review = getCasinoReviewBySlug(slug);
+  const review = await getCasinoReviewBySlug(slug);
   if (!review) return {};
   const url = `https://bonuscheckr.com/casinos/${review.slug}`;
   return {
@@ -51,7 +58,7 @@ export default async function CasinoReviewPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const review = getCasinoReviewBySlug(slug);
+  const review = await getCasinoReviewBySlug(slug);
   if (!review) notFound();
 
   // Article schema only — no Review / AggregateRating (SEO call:

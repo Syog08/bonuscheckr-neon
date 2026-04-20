@@ -1,5 +1,4 @@
-// Temporary hardcoded casino review for preview.
-// Replaced by Supabase query in content migration step.
+import { supabase, type CasinoReviewRow, type AuthorRow } from "./supabase";
 
 export interface CasinoReview {
   slug: string;
@@ -16,7 +15,7 @@ export interface CasinoReview {
   termsData: Array<{ flag: string | null; label: string; value: string }>;
   pros: string[];
   cons: string[];
-  content: string; // markdown body
+  content: string;
   affiliateUrl: string;
   affiliateCta: string;
   author: { name: string; initials: string };
@@ -26,116 +25,137 @@ export interface CasinoReview {
   related: { slug: string; casinoName: string; score: string; verdict: "good" | "fair" | "risky" | "avoid"; blurb: string }[];
 }
 
-const sampleReview: CasinoReview = {
-  slug: "stake-welcome-bonus",
-  casinoName: "Stake",
-  casinoSlug: "stake",
-  metaTitle:
-    "Stake casino analysis 2026 — no welcome bonus, $100K daily races",
-  metaDescription:
-    "Honest analysis of Stake.com. No traditional welcome match — but $100K daily races, $75K weekly raffles, and VIP rakeback from day one. Verdict: 7.9/10.",
-  verdict: "good",
-  verdictTitle:
-    "Good value — no welcome bonus, but ongoing rewards outperform most deposit matches",
-  verdictSummary:
-    "Stake does not offer a traditional deposit match on the global crypto site. Instead, every player competes in $100,000 daily races, $75,000 weekly raffles, and earns VIP rakeback from day one. No wagering requirements on prizes. For regular players, this activity-based model delivers more value over time than a one-off deposit match with 40× wagering — but it gives you nothing upfront.",
-  score: "7.9",
-  expectedValue: "Positive for active players (daily race prizes + rakeback)",
-  totalWagering: "None — rewards are activity-based",
-  termsData: [
-    { flag: "bad", label: "Welcome bonus", value: "None on the global crypto site" },
-    { flag: "ok", label: "Daily races", value: "$100,000 prize pool every 24 hours — top 5,000 players" },
-    { flag: "ok", label: "Weekly raffle", value: "$75,000 — tickets earned by wagering" },
-    { flag: "ok", label: "Wheel Wars", value: "$150,000 monthly prize pool" },
-    { flag: "ok", label: "VIP rakeback", value: "Activity-based, increases with VIP tier" },
-    { flag: "ok", label: "Wagering on prizes", value: "None — prizes credited as real cash" },
-    { flag: "ok", label: "Min deposit", value: "No minimum (crypto dependent)" },
-    { flag: "ok", label: "KYC requirement", value: "Not required for basic play — may be triggered on large withdrawals" },
-    { flag: null, label: "Supported cryptos", value: "BTC, ETH, LTC, DOGE, XRP, USDT, and more" },
-    { flag: null, label: "Restricted countries", value: "US (redirected to Stake.us), UK, Australia, France, others" },
-    { flag: null, label: "Licence", value: "Curacao (Medium Rare N.V.) — operating since 2017" },
-  ],
-  pros: [
-    "$100,000 daily race means real cash prizes available every single day — no opt-in needed",
-    "$75,000 weekly raffle gives every active player a shot at significant prizes",
-    "No wagering requirements on any prizes — everything is withdrawable cash",
-    "No KYC required for basic play — one of the few remaining no-KYC crypto casinos",
-    "VIP programme rewards long-term players with escalating rakeback",
-    "Operating since 2017 — one of the most established crypto casinos in the market",
-  ],
-  cons: [
-    "No welcome bonus on the global crypto site — nothing upfront to play with",
-    "Daily race rewards are heavily skewed toward high-volume players at the top of the leaderboard",
-    "Casual players will earn minimal returns from races and raffles",
-    "VIP tier progression is not transparent — exact requirements are not published",
-    "Restricted in US, UK, Australia, and several other major markets",
-  ],
-  content: `## How the activity-based model works
-
-Most crypto casinos lead with a deposit match — "100% up to \`1 BTC\`, 40× wagering". Stake skips that and puts everything into ongoing rewards that compound with play. For a regular player, this is usually the better deal.
-
-Every bet you place — casino or sportsbook — earns you ticket entries into the weekly raffle and points toward the daily race leaderboard. Winning prizes drop as **real cash**, not bonus credit, so there is no rollover to clear before withdrawal.
-
-## The daily $100K race in practice
-
-A \`$100,000\` pool is split between the top 5,000 players on the wagering leaderboard every 24 hours. The top spots — positions 1-10 — take a disproportionate share. A \`$25\` bettor wagering a few hundred a day will typically land somewhere in positions 2,000-4,000 and earn roughly **\`$1\`-\`$5\` per day**. That's not nothing over a month, but it's not the headline number either.
-
-| Leaderboard position | Typical daily prize |
-| --- | --- |
-| 1st | $10,000+ |
-| 10th | ~$1,000 |
-| 100th | ~$150 |
-| 1,000th | ~$15 |
-| 5,000th | ~$1 |
-
-## When Stake makes sense — and when it doesn't
-
-Stake is a strong choice if any of these describe you:
-
-- You already bet at crypto casinos regularly and wagering volume is not a bottleneck
-- You value no-KYC flexibility and a broad game library over a one-off deposit match
-- You want sports + casino + originals in one place without juggling accounts
-
-Stake is the wrong choice if:
-
-- You're a casual player who deposits \`$50\` once a month — the activity model returns very little at that volume
-- You want a guaranteed headline bonus upfront, no matter the wagering cost
-- You're in a restricted geo (US, UK, Australia, or several others)`,
-  affiliateUrl: "https://stake.com/?c=J7JXsz6z",
-  affiliateCta: "Join Stake — $100K daily races",
-  author: { name: "Max Veld", initials: "MV" },
-  updated: "Updated 12 Apr 2026",
-  readTime: "9 min read",
-  faq: [
-    {
-      question: "Is Stake safe to use without KYC?",
-      answer:
-        "Basic play on Stake does not require KYC verification — you can deposit, play, and withdraw without submitting identity documents in most cases. However, Stake reserves the right to request KYC at any time, particularly on large withdrawals. If you plan to cash out significant sums, assume KYC will be triggered.",
-    },
-    {
-      question: "Can I claim the daily $100K race prize if I'm a small player?",
-      answer:
-        "Yes, but expect small amounts. The prize pool is weighted heavily toward the top of the leaderboard. Players wagering $100-500 per day typically land in positions 2,000-4,000 and earn between $1-5 daily. Over 30 days that's $30-150 in real cash — meaningful, but not the headline number.",
-    },
-    {
-      question: "Why doesn't Stake offer a traditional welcome bonus?",
-      answer:
-        "Stake's product philosophy is that ongoing activity-based rewards deliver more long-term value than a one-off deposit match with wagering requirements. For players who stay active, this plays out as the better deal. For casual players, a competitor offering 100% up to $500 with 35× wagering will often feel more generous — even if the expected value is actually lower.",
-    },
-  ],
-  related: [
-    { slug: "cloudbet-welcome-package", casinoName: "Cloudbet", score: "8.4", verdict: "good", blurb: "Real cash rewards, no rollover" },
-    { slug: "duelbits-welcome-bonus", casinoName: "Duelbits", score: "7.1", verdict: "fair", blurb: "Strong rakeback, heavy wagering to unlock spins" },
-    { slug: "shuffle-welcome-bonus", casinoName: "Shuffle", score: "6.8", verdict: "fair", blurb: "100% match, 35× wagering with game edge weighting" },
-  ],
-};
-
-export function getCasinoReviewBySlug(slug: string): CasinoReview | null {
-  if (slug === sampleReview.slug) return sampleReview;
-  // Return sample for any slug so preview works for all links
-  return { ...sampleReview, slug };
+function formatUpdated(iso: string | null): string {
+  if (!iso) return "Recently updated";
+  const d = new Date(iso);
+  const month = d.toLocaleString("en-US", { month: "short" });
+  return `Updated ${d.getDate()} ${month} ${d.getFullYear()}`;
 }
 
-export function getAllCasinoReviewSlugs(): string[] {
-  return [sampleReview.slug];
+function computeReadTime(content: string): string {
+  const words = content.split(/\s+/).filter(Boolean).length;
+  const min = Math.max(3, Math.round(words / 200));
+  return `${min} min read`;
+}
+
+function extractFAQ(content: string): {
+  body: string;
+  faq: { question: string; answer: string }[];
+} {
+  const faqRegex = /\n##\s+(?:FAQ|Frequently Asked Questions|FAQs)\s*\n([\s\S]*?)(?=\n##\s+|$)/i;
+  const match = content.match(faqRegex);
+  if (!match) return { body: content, faq: [] };
+  const faqBlock = match[1];
+  const faq: { question: string; answer: string }[] = [];
+  const qRegex = /###\s+([^\n]+)\n([\s\S]*?)(?=\n###\s+|$)/g;
+  let m;
+  while ((m = qRegex.exec(faqBlock)) !== null) {
+    faq.push({ question: m[1].trim(), answer: m[2].trim() });
+  }
+  const body = content.replace(faqRegex, "").trim();
+  return { body, faq };
+}
+
+export async function getCasinoReviewBySlug(slug: string): Promise<CasinoReview | null> {
+  const { data: review, error } = await supabase
+    .from("casino_reviews")
+    .select("*")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .eq("noindex", false)
+    .maybeSingle();
+
+  if (error || !review) return null;
+
+  const { data: author } = await supabase
+    .from("authors")
+    .select("*")
+    .eq("id", review.author_id)
+    .maybeSingle();
+
+  const row = review as CasinoReviewRow;
+  const authorRow = author as AuthorRow | null;
+  const { body, faq } = extractFAQ(row.content);
+
+  // Related: 3 other reviews ordered by score desc
+  const { data: relatedRows } = await supabase
+    .from("casino_reviews")
+    .select("slug, casino_name, score, verdict, verdict_summary")
+    .eq("status", "published")
+    .eq("noindex", false)
+    .neq("slug", slug)
+    .order("score", { ascending: false })
+    .limit(3);
+
+  const related = (relatedRows || []).map((r: { slug: string; casino_name: string; score: number; verdict: string; verdict_summary: string }) => ({
+    slug: r.slug,
+    casinoName: r.casino_name,
+    score: r.score.toFixed(1),
+    verdict: r.verdict as "good" | "fair" | "risky" | "avoid",
+    blurb: r.verdict_summary.split(".")[0] + ".",
+  }));
+
+  return {
+    slug: row.slug,
+    casinoName: row.casino_name,
+    casinoSlug: row.casino_slug,
+    metaTitle: row.meta_title || row.verdict_title,
+    metaDescription: row.meta_description || row.verdict_summary,
+    verdict: row.verdict,
+    verdictTitle: row.verdict_title,
+    verdictSummary: row.verdict_summary,
+    score: Number(row.score).toFixed(1),
+    expectedValue: row.expected_value || "",
+    totalWagering: row.total_wagering || "",
+    termsData: row.terms_data,
+    pros: row.pros,
+    cons: row.cons,
+    content: body,
+    affiliateUrl: row.affiliate_url,
+    affiliateCta: row.affiliate_cta,
+    author: {
+      name: authorRow?.name || "BonusCheckr Team",
+      initials: authorRow?.initials || "BC",
+    },
+    updated: formatUpdated(row.last_updated || row.publish_date),
+    readTime: computeReadTime(row.content),
+    faq,
+    related,
+  };
+}
+
+export async function getAllCasinoReviews(): Promise<
+  {
+    slug: string;
+    casinoName: string;
+    score: string;
+    verdict: "good" | "fair" | "risky" | "avoid";
+    verdictTitle: string;
+    blurb: string;
+  }[]
+> {
+  const { data } = await supabase
+    .from("casino_reviews")
+    .select("slug, casino_name, score, verdict, verdict_title, verdict_summary")
+    .eq("status", "published")
+    .eq("noindex", false)
+    .order("score", { ascending: false });
+
+  return (data || []).map((r: { slug: string; casino_name: string; score: number; verdict: string; verdict_title: string; verdict_summary: string }) => ({
+    slug: r.slug,
+    casinoName: r.casino_name,
+    score: r.score.toFixed(1),
+    verdict: r.verdict as "good" | "fair" | "risky" | "avoid",
+    verdictTitle: r.verdict_title,
+    blurb: r.verdict_summary.split(".")[0] + ".",
+  }));
+}
+
+export async function getAllCasinoReviewSlugs(): Promise<string[]> {
+  const { data } = await supabase
+    .from("casino_reviews")
+    .select("slug")
+    .eq("status", "published")
+    .eq("noindex", false);
+  return (data || []).map((r: { slug: string }) => r.slug);
 }
