@@ -1,20 +1,37 @@
-import type { MetadataRoute } from "next";
+import { MetadataRoute } from 'next';
 
-// IMPORTANT: This file currently disallows all crawling because the site
-// is deployed to a preview URL. When we cut DNS over to bonuscheckr.com,
-// this must be replaced with production rules (Allow: /, + sitemap ref).
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://bonuscheckr-neon.vercel.app';
+
+// Production domain where the site is allowed to be indexed.
+// Any other host (preview URLs, the vercel.app default) stays noindexed.
+const PRODUCTION_DOMAIN = 'https://bonuscheckr.com';
+const isProduction = SITE_URL === PRODUCTION_DOMAIN;
+
 export default function robots(): MetadataRoute.Robots {
-  const isProduction =
-    process.env.NEXT_PUBLIC_SITE_URL === "https://bonuscheckr.com";
-
-  if (isProduction) {
+  if (!isProduction) {
+    // Preview environments and the default vercel.app domain:
+    // block all crawlers entirely.
     return {
-      rules: { userAgent: "*", allow: "/" },
-      sitemap: "https://bonuscheckr.com/sitemap.xml",
+      rules: [
+        {
+          userAgent: '*',
+          disallow: '/',
+        },
+      ],
     };
   }
 
+  // Production: allow everything, point Google at the sitemap.
   return {
-    rules: { userAgent: "*", disallow: "/" },
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/api/'],
+      },
+    ],
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }
