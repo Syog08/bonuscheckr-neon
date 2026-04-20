@@ -9,7 +9,7 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <section className="px-4 pt-7 pb-[18px] text-center sm:px-6 sm:pt-14 sm:pb-8">
-        <div className="mx-auto max-w-[680px]">
+        <div className="mx-auto max-w-[820px]">
           <div className="mb-[14px] inline-flex items-center gap-[6px] rounded-full border border-line bg-bg-surface px-[10px] py-[5px] font-mono text-[10px] font-medium tracking-[0.04em] text-fg-muted sm:mb-[18px] sm:text-[11px]">
             <span className="h-[5px] w-[5px] rounded-full bg-accent" aria-hidden="true" />
             Crypto · no-KYC friendly
@@ -18,7 +18,7 @@ export default function HomePage() {
             Is this casino bonus <span className="text-accent">actually</span>{" "}
             worth claiming?
           </h1>
-          <p className="mx-auto max-w-[480px] px-2 text-[13px] leading-[1.5] text-fg-muted sm:text-[15px]">
+          <p className="mx-auto max-w-[520px] px-2 text-[13px] leading-[1.5] text-fg-muted sm:text-[15px]">
             Snap the terms or paste them. Get an instant verdict before you deposit.
           </p>
         </div>
@@ -26,21 +26,21 @@ export default function HomePage() {
 
       {/* Analyser input */}
       <section className="px-4 pb-[14px] sm:px-6 sm:pb-4">
-        <div className="mx-auto max-w-[620px]">
+        <div className="mx-auto max-w-[680px]">
           <BonusAnalyser />
         </div>
       </section>
 
       {/* Sample verdict */}
       <section className="px-4 pt-[14px] pb-6 sm:px-6 sm:pb-12">
-        <div className="mx-auto max-w-[620px]">
+        <div className="mx-auto max-w-[680px]">
           <VerdictCard />
         </div>
       </section>
 
       {/* Value props */}
       <section className="border-t border-line px-4 py-7 sm:px-6 sm:py-10">
-        <div className="mx-auto max-w-[680px]">
+        <div className="mx-auto max-w-[820px]">
           <ValuePropCards />
         </div>
       </section>

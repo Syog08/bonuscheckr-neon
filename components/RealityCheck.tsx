@@ -1,7 +1,7 @@
 export default function RealityCheck() {
   return (
     <div className="border-t border-line bg-bg-subtle px-4 py-[22px] sm:px-6 sm:py-8">
-      <div className="mx-auto max-w-[620px]">
+      <div className="mx-auto max-w-[720px]">
         <div className="mb-[8px] font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-danger sm:text-[11px] sm:tracking-[0.12em]">
           Wagering reality check
         </div>

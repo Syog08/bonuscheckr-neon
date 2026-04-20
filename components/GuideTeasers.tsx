@@ -30,7 +30,7 @@ const guides = [
 export default function GuideTeasers() {
   return (
     <div className="border-t border-line px-4 py-8 sm:px-6 sm:py-10">
-      <div className="mx-auto max-w-[680px]">
+      <div className="mx-auto max-w-[820px]">
         <div className="mb-[14px] sm:mb-[18px]">
           <div className="mb-[4px] font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-fg-dim sm:text-[11px] sm:tracking-[0.08em]">
             Mechanics
