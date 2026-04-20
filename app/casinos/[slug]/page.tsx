@@ -61,17 +61,33 @@ export default async function CasinoReviewPage({
   const review = await getCasinoReviewBySlug(slug);
   if (!review) notFound();
 
-  // Article schema only — no Review / AggregateRating (SEO call:
-  // Google penalises self-serving review schema on YMYL affiliate sites).
-  const articleJsonLd = {
+  const readTime = Math.max(1, Math.ceil(review.content.split(/\s+/).length / 220));
+
+  const reviewSchema = {
     "@context": "https://schema.org",
-    "@type": "Article",
-    headline: review.verdictTitle,
-    description: review.metaDescription,
-    author: { "@type": "Person", name: review.author.name },
-    datePublished: "2026-04-12",
-    dateModified: "2026-04-12",
-    mainEntityOfPage: `https://bonuscheckr.com/casinos/${review.slug}`,
+    "@type": "Review",
+    itemReviewed: {
+      "@type": "Organization",
+      name: review.casinoName,
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: review.score,
+      bestRating: 10,
+      worstRating: 1,
+    },
+    author: {
+      "@type": "Person",
+      name: review.author.name,
+    },
+    datePublished: review.publishDate,
+    dateModified: review.lastUpdated || review.publishDate,
+    publisher: {
+      "@type": "Organization",
+      name: "BonusCheckr",
+      url: "https://bonuscheckr.com",
+    },
+    reviewBody: review.verdictSummary,
   };
 
   // Split body markdown to insert mid-article CTA after first H2 section.
@@ -96,7 +112,7 @@ export default async function CasinoReviewPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
       />
 
       <div className="px-4 pt-[18px] sm:px-6">
@@ -124,7 +140,7 @@ export default async function CasinoReviewPage({
             <span className="text-line-strong">·</span>
             <span>{review.updated}</span>
             <span className="text-line-strong">·</span>
-            <span>{review.readTime}</span>
+            <span>{readTime} min read</span>
           </div>
 
           {/* Verdict hero */}

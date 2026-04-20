@@ -51,15 +51,29 @@ export default async function GuidePage({
   const guide = await getGuideBySlug(slug);
   if (!guide) notFound();
 
-  const articleJsonLd = {
+  const readTime = Math.max(1, Math.ceil(guide.content.split(/\s+/).length / 220));
+
+  const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: guide.title,
-    description: guide.meta_description,
-    author: { "@type": "Person", name: guide.author.name },
-    datePublished: "2026-04-12",
-    dateModified: "2026-04-12",
-    mainEntityOfPage: `https://bonuscheckr.com/guides/${guide.slug}`,
+    description: guide.description || guide.meta_description,
+    datePublished: guide.publish_date,
+    dateModified: guide.last_updated || guide.publish_date,
+    author: {
+      "@type": "Person",
+      name: guide.author.name,
+      jobTitle: guide.author.expertise,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "BonusCheckr",
+      url: "https://bonuscheckr.com",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://bonuscheckr.com/guides/${guide.slug}`,
+    },
   };
 
   // Split body markdown to insert mid-article CTA after the first H2 section.
@@ -84,7 +98,7 @@ export default async function GuidePage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
 
       <div className="px-4 pt-[18px] sm:px-6">
@@ -111,7 +125,7 @@ export default async function GuidePage({
             <span className="text-line-strong">·</span>
             <span>{guide.updated}</span>
             <span className="text-line-strong">·</span>
-            <span>{guide.readTime}</span>
+            <span>{readTime} min read</span>
           </div>
 
           <h1 className="mb-[22px] text-[28px] font-bold leading-[1.15] tracking-[-0.025em] text-fg sm:mb-[26px] sm:text-[34px] lg:text-[36px]">
