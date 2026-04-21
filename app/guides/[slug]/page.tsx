@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import TLDRCallout from "@/components/TLDRCallout";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
@@ -64,6 +65,7 @@ export default async function GuidePage({
       "@type": "Person",
       name: guide.author.name,
       jobTitle: guide.author.expertise,
+      url: `https://bonuscheckr.com/authors/${guide.author.id}`,
     },
     publisher: {
       "@type": "Organization",
@@ -116,12 +118,12 @@ export default async function GuidePage({
       <article className="px-4 py-4 pb-10 sm:px-6">
         <div className="mx-auto max-w-[820px]">
           <div className="mb-4 flex flex-wrap items-center gap-3 text-[12px] text-fg-dim">
-            <div className="flex items-center gap-[7px]">
+            <Link href={`/authors/${guide.author.id}`} className="flex items-center gap-[7px]">
               <div className="flex h-[22px] w-[22px] items-center justify-center rounded-full border border-line bg-bg-surface font-mono text-[10px] font-semibold text-fg-muted">
                 {guide.author.initials}
               </div>
               <span className="text-fg">{guide.author.name}</span>
-            </div>
+            </Link>
             <span className="text-line-strong">·</span>
             <span>{guide.updated}</span>
             <span className="text-line-strong">·</span>
