@@ -38,18 +38,13 @@ export default function Header() {
     <>
       <header className="sticky top-0 z-40 border-b border-line bg-bg-base/95 px-4 py-3 backdrop-blur sm:px-6 sm:py-[14px]">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link
-              href="/"
-              onClick={() => setOpen(false)}
-              className="text-[15px] font-bold tracking-tight"
-            >
-              bonuscheckr<span className="text-accent">.</span>
-            </Link>
-            <span className="rounded-sm border border-accent-ring bg-accent-dim px-[7px] py-[2px] font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-accent">
-              BETA
-            </span>
-          </div>
+          <Link
+            href="/"
+            onClick={() => setOpen(false)}
+            className="text-[15px] font-bold tracking-tight"
+          >
+            bonuscheckr<span className="text-accent">.</span>
+          </Link>
 
           <nav className="hidden items-center gap-7 text-[13px] text-fg-muted sm:flex">
             {NAV_ITEMS.map((n) => (
