@@ -29,6 +29,12 @@ export type AuthorRow = {
   initials: string;
   bio: string | null;
   expertise: string | null;
+  avatar_url: string | null;
+  long_bio: string | null;
+  methodology: string | null;
+  credentials: string[] | null;
+  disclosure: string | null;
+  created_at: string;
 };
 
 export type CasinoReviewRow = {

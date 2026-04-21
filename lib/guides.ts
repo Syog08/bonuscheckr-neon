@@ -11,7 +11,7 @@ export interface Guide {
   last_updated: string | null;
   tldr: string;
   content: string;
-  author: { name: string; initials: string; expertise: string | null };
+  author: { id: string; name: string; initials: string; expertise: string | null };
   updated: string;
   readTime: string;
   faq: { question: string; answer: string }[];
@@ -121,6 +121,7 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
     tldr,
     content: body,
     author: {
+      id: authorRow?.id || "",
       name: authorRow?.name || "BonusCheckr Team",
       initials: authorRow?.initials || "BC",
       expertise: authorRow?.expertise ?? null,

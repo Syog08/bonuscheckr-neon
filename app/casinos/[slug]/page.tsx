@@ -78,6 +78,8 @@ export default async function CasinoReviewPage({
     author: {
       "@type": "Person",
       name: review.author.name,
+      jobTitle: review.author.expertise,
+      url: `https://bonuscheckr.com/authors/${review.author.id}`,
     },
     datePublished: review.publishDate,
     dateModified: review.lastUpdated || review.publishDate,
@@ -130,12 +132,12 @@ export default async function CasinoReviewPage({
         <div className="mx-auto max-w-[820px]">
           {/* Byline */}
           <div className="mb-4 flex flex-wrap items-center gap-3 text-[12px] text-fg-dim">
-            <div className="flex items-center gap-[7px]">
+            <Link href={`/authors/${review.author.id}`} className="flex items-center gap-[7px]">
               <div className="flex h-[22px] w-[22px] items-center justify-center rounded-full border border-line bg-bg-surface font-mono text-[10px] font-semibold text-fg-muted">
                 {review.author.initials}
               </div>
               <span className="text-fg">{review.author.name}</span>
-            </div>
+            </Link>
             <span className="text-line-strong">·</span>
             <span>{review.updated}</span>
             <span className="text-line-strong">·</span>

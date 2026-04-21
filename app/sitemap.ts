@@ -61,6 +61,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.3,
     },
+    {
+      url: `${SITE_URL}/authors/sergio-t`,
+      lastModified: new Date('2026-04-20'),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
   ];
 
   // Guides — only published, non-noindexed. Uses last_updated for lastmod,
