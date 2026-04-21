@@ -24,6 +24,7 @@ export interface CasinoReview {
   updated: string;
   readTime: string;
   faq: { question: string; answer: string }[];
+  faqs: { q: string; a: string }[];
   related: { slug: string; casinoName: string; score: string; verdict: "good" | "fair" | "risky" | "avoid"; blurb: string }[];
 }
 
@@ -124,6 +125,7 @@ export async function getCasinoReviewBySlug(slug: string): Promise<CasinoReview 
     updated: formatUpdated(row.last_updated || row.publish_date),
     readTime: computeReadTime(row.content),
     faq,
+    faqs: (row.faqs as Array<{ q: string; a: string }> | null) ?? [],
     related,
   };
 }

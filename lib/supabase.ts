@@ -52,4 +52,5 @@ export type CasinoReviewRow = {
   meta_description: string | null;
   publish_date: string | null;
   last_updated: string | null;
+  faqs: Array<{ q: string; a: string }> | null;
 };

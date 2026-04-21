@@ -6,7 +6,6 @@ import TermsAtGlance from "@/components/TermsAtGlance";
 import ProsCons from "@/components/ProsCons";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import MidArticleCTA from "@/components/MidArticleCTA";
-import FAQBlock from "@/components/FAQBlock";
 import StickyAffiliateCTA from "@/components/StickyAffiliateCTA";
 import Link from "next/link";
 import { getCasinoReviewBySlug, getAllCasinoReviewSlugs } from "@/lib/casinos";
@@ -174,8 +173,6 @@ export default async function CasinoReviewPage({
 
           {bodyAfterCTA && <MarkdownRenderer content={bodyAfterCTA} />}
 
-          {/* FAQ */}
-          <FAQBlock items={review.faq} />
         </div>
       </article>
 
@@ -214,6 +211,48 @@ export default async function CasinoReviewPage({
           </div>
         </div>
       </section>
+
+      {/* FAQ */}
+      {review.faqs && review.faqs.length > 0 && (
+        <>
+          <section className="border-t border-line px-4 py-9 sm:px-6">
+            <div className="mx-auto max-w-[820px]">
+              <h2 className="mb-4 text-[20px] font-bold tracking-[-0.015em] text-fg sm:text-[22px]">
+                FAQ
+              </h2>
+              <div className="flex flex-col gap-2">
+                {review.faqs.map((item: { q: string; a: string }, i: number) => (
+                  <details
+                    key={i}
+                    className="rounded-md border border-line bg-bg-surface p-4 sm:p-[18px]"
+                  >
+                    <summary className="flex cursor-pointer list-none items-start justify-between gap-2 font-semibold text-fg">
+                      <span>{item.q}</span>
+                      <span className="ml-4 font-mono text-[12px] font-bold text-accent">+</span>
+                    </summary>
+                    <p className="mt-3 text-[13px] leading-[1.65] text-fg-muted">{item.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: review.faqs.map((item: { q: string; a: string }) => ({
+                  "@type": "Question",
+                  name: item.q,
+                  acceptedAnswer: { "@type": "Answer", text: item.a },
+                })),
+              }),
+            }}
+          />
+        </>
+      )}
 
       {/* Mobile sticky CTA */}
       <StickyAffiliateCTA
