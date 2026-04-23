@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 
-const client = new Anthropic();
-
 export async function POST(req: NextRequest) {
   const { terms } = await req.json();
 
@@ -13,12 +11,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
+  if (!apiKey) {
     return NextResponse.json(
       { error: "API key not configured." },
       { status: 500 }
     );
   }
+
+  console.log("API key prefix:", apiKey.slice(0, 7), "length:", apiKey.length);
+  const client = new Anthropic({ apiKey });
 
   const systemPrompt = `You are an expert casino bonus analyst. Analyse the bonus terms and return ONLY valid JSON with this structure:
 {
