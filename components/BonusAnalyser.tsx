@@ -1,77 +1,111 @@
+"use client";
+
+import { useState } from "react";
+import LiveVerdictCard from "./LiveVerdictCard";
+
+interface AnalysisResult {
+  verdictTitle: string;
+  verdictType: "good" | "fair" | "risky" | "avoid";
+  score: number;
+  summary: string;
+  stats: {
+    wagering: { value: string; label: string; severity: "low" | "medium" | "high" };
+    maxCashout: { value: string; label: string; severity: "low" | "medium" | "high" };
+    maxBet: { value: string; label: string; severity: "low" | "medium" | "high" };
+    ev: { value: string; label: string; severity: "low" | "medium" | "high" };
+  };
+  traps: { severity: "low" | "medium" | "high"; title: string; detail: string }[];
+  positives: string[];
+}
+
 export default function BonusAnalyser() {
+  const [terms, setTerms] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<AnalysisResult | null>(null);
+
+  async function handleAnalyse() {
+    if (terms.trim().length < 10) return;
+    setLoading(true);
+    setError(null);
+    setResult(null);
+    try {
+      const res = await fetch("/api/analyse", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ terms }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error ?? "Something went wrong. Please try again.");
+        return;
+      }
+      setResult(data);
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleReset() {
+    setTerms("");
+    setResult(null);
+    setError(null);
+  }
+
   return (
-    <div className="rounded-lg border border-line bg-bg-surface p-4">
-      {/* Screenshot upload — primary input on mobile, equal on desktop */}
-      <div className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-fg-dim mb-2">
-        Upload a screenshot
-      </div>
-
-      <label className="flex cursor-not-allowed flex-col items-center gap-[9px] rounded-md border border-dashed border-fg-faint bg-bg-base px-3 py-[18px] text-center opacity-90">
-        <div className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-bg-surface text-fg-muted">
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-            <circle cx="12" cy="13" r="4" />
-          </svg>
+    <div className="w-full max-w-2xl mx-auto space-y-6">
+      <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 space-y-4">
+        <div>
+          <label className="text-white font-semibold text-sm block mb-1">
+            Paste Bonus Terms
+          </label>
+          <p className="text-white/40 text-xs mb-3">
+            Copy the T&Cs from any casino bonus page and paste them below.
+          </p>
+          <textarea
+            value={terms}
+            onChange={(e) => setTerms(e.target.value)}
+            placeholder="e.g. 100% match up to 200. 35x wagering on bonus. Max bet 5. Games excluded: live casino, jackpots..."
+            rows={7}
+            className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/20 text-sm p-4 resize-none focus:outline-none focus:border-white/30 transition-colors"
+          />
         </div>
-        <span className="text-[13px] font-semibold text-fg">
-          Tap to upload or take a photo
-        </span>
-        <span className="font-mono text-[10px] leading-[1.5] text-fg-dim">
-          From your library, or snap the T&amp;Cs page
-          <br />
-          PNG, JPG · up to 5&nbsp;MB
-        </span>
-        <input
-          type="file"
-          accept="image/png,image/jpeg,image/webp"
-          className="hidden"
-          disabled
-          aria-label="Upload screenshot of bonus terms"
-        />
-      </label>
-
-      {/* Or divider */}
-      <div className="my-[14px] flex items-center gap-[10px]">
-        <div className="h-px flex-1 bg-line" />
-        <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-fg-faint">
-          Or
-        </span>
-        <div className="h-px flex-1 bg-line" />
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleAnalyse}
+            disabled={loading || terms.trim().length < 10}
+            className="flex-1 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm py-3 transition-colors"
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                </svg>
+                Analysing…
+              </span>
+            ) : (
+              "Analyse Bonus"
+            )}
+          </button>
+          {(result || error) && (
+            <button
+              onClick={handleReset}
+              className="px-4 py-3 rounded-xl border border-white/10 text-white/50 hover:text-white hover:border-white/30 text-sm font-medium transition-colors"
+            >
+              Reset
+            </button>
+          )}
+        </div>
       </div>
-
-      {/* Paste textarea — secondary input */}
-      <div className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-fg-dim mb-2">
-        Paste the terms
-      </div>
-      <textarea
-        disabled
-        className="block w-full resize-none rounded-md border border-line bg-bg-base p-[10px] font-mono text-[11px] text-fg-faint opacity-70 disabled:cursor-not-allowed"
-        style={{ minHeight: 80 }}
-        defaultValue="100% up to 1 BTC, 40× wagering, 7 day expiry, max bet $5..."
-        aria-label="Paste bonus terms"
-      />
-
-      <button
-        type="button"
-        disabled
-        className="mt-[14px] block w-full cursor-not-allowed rounded-md border border-line bg-bg-elevated px-3 py-[14px] text-[13px] font-semibold text-fg-faint"
-        style={{ minHeight: 48 }}
-      >
-        Analyse bonus terms
-      </button>
-      <div className="mt-[9px] text-center font-mono text-[10px] text-fg-dim">
-        <span className="text-warning">●</span> full analyser coming soon
-      </div>
+      {error && (
+        <div className="rounded-xl border border-red-400/30 bg-red-400/10 p-4 text-red-400 text-sm">
+          {error}
+        </div>
+      )}
+      {result && <LiveVerdictCard result={result} />}
     </div>
   );
 }
