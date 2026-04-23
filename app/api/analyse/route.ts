@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic();
 
 export async function POST(req: NextRequest) {
   const { terms } = await req.json();
@@ -10,8 +13,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
+  if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json(
       { error: "API key not configured." },
       { status: 500 }
@@ -35,42 +37,26 @@ export async function POST(req: NextRequest) {
 }
 verdictType: good/fair/risky/avoid. severity: low/medium/high. 2-5 traps, 2-4 positives.`;
 
-  const userMsg = `BONUS TERMS:\n${terms}`;
-
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-haiku-4-5-20251001",
-        max_tokens: 1500,
-        system: systemPrompt,
-        messages: [{ role: "user", content: userMsg }],
-      }),
+    const message = await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1500,
+      system: systemPrompt,
+      messages: [{ role: "user", content: `BONUS TERMS:\n${terms}` }],
     });
 
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("Anthropic API error:", errText);
-      return NextResponse.json(
-        { error: "Analysis failed. Please try again." },
-        { status: 502 }
-      );
-    }
-
-    const data = await response.json();
-    const rawText: string = data.content[0].text;
-    const cleaned = rawText.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/g, "").trim();
+    const rawText = (message.content[0] as { type: string; text: string }).text;
+    const cleaned = rawText
+      .replace(/^```json\s*/i, "")
+      .replace(/^```\s*/i, "")
+      .replace(/\s*```$/g, "")
+      .trim();
     const result = JSON.parse(cleaned);
     return NextResponse.json(result);
   } catch (err) {
     console.error("Analysis error:", err);
     return NextResponse.json(
-      { error: "Failed to parse analysis. Please try again." },
+      { error: "Analysis failed. Please try again." },
       { status: 500 }
     );
   }
