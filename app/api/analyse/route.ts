@@ -13,6 +13,8 @@ export async function POST(req: NextRequest) {
 
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
   if (!apiKey) {
+    const anthropicKeys = Object.keys(process.env).filter(k => k.includes("ANTHROPIC"));
+    console.error("API key missing. Env keys containing ANTHROPIC:", anthropicKeys);
     return NextResponse.json(
       { error: "API key not configured." },
       { status: 500 }
