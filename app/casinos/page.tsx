@@ -3,6 +3,7 @@ import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getAllCasinoReviews } from "@/lib/casinos";
 
+export const revalidate = 300;
 export const metadata: Metadata = {
   title: "Casino reviews — BonusCheckr",
   description:
