@@ -67,11 +67,11 @@ const SEVERITY_COLORS = {
 export default function LiveVerdictCard({ result }: LiveVerdictCardProps) {
   const verdict = VERDICT_CONFIG[result.verdictType] ?? VERDICT_CONFIG.fair;
   const stats = [
-    result.stats.wagering,
-    result.stats.maxCashout,
-    result.stats.maxBet,
-    result.stats.ev,
-  ];
+    result.stats?.wagering,
+    result.stats?.maxCashout,
+    result.stats?.maxBet,
+    result.stats?.ev,
+  ].filter((s): s is Stat => !!s);
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-hidden">
@@ -89,7 +89,7 @@ export default function LiveVerdictCard({ result }: LiveVerdictCardProps) {
           </div>
           <div className="shrink-0 text-center">
             <div className={`text-4xl font-black ${verdict.color}`}>
-              {result.score.toFixed(1)}
+              {typeof result.score === "number" ? result.score.toFixed(1) : result.score}
             </div>
             <div className="text-white/40 text-xs">/ 10</div>
           </div>
@@ -110,7 +110,7 @@ export default function LiveVerdictCard({ result }: LiveVerdictCardProps) {
       </div>
 
       {/* Traps */}
-      {result.traps.length > 0 && (
+      {Array.isArray(result.traps) && result.traps.length > 0 && (
         <div className="p-6 border-t border-white/10">
           <h4 className="text-white/50 text-xs font-bold tracking-widest uppercase mb-4">
             Watch Out For
@@ -133,7 +133,7 @@ export default function LiveVerdictCard({ result }: LiveVerdictCardProps) {
       )}
 
       {/* Positives */}
-      {result.positives.length > 0 && (
+      {Array.isArray(result.positives) && result.positives.length > 0 && (
         <div className="p-6 border-t border-white/10">
           <h4 className="text-white/50 text-xs font-bold tracking-widest uppercase mb-4">
             What Works

@@ -39,7 +39,14 @@ export async function POST(req: NextRequest) {
   "traps": [{ "severity": "high", "title": "name", "detail": "explanation" }],
   "positives": ["positive 1", "positive 2"]
 }
-verdictType: good/fair/risky/avoid. severity: low/medium/high. 2-5 traps, 2-4 positives.`;
+IMPORTANT RULES:
+- verdictType must be one of: good/fair/risky/avoid
+- severity must be one of: low/medium/high
+- traps must always be a JSON array (use [] if none found)
+- positives must always be a JSON array (use [] if none found)
+- stats values must always be strings, score must be a number
+- If information is missing from the terms, use "N/A" as the value and "medium" as severity
+- Return ONLY the JSON object, no other text`;
 
   try {
     const message = await client.messages.create({
