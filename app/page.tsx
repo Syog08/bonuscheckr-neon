@@ -1,5 +1,4 @@
 import BonusAnalyser from "@/components/BonusAnalyser";
-import VerdictCard from "@/components/VerdictCard";
 import ValuePropCards from "@/components/ValuePropCards";
 import RealityCheck from "@/components/RealityCheck";
 import GuideTeasers from "@/components/GuideTeasers";
@@ -28,13 +27,6 @@ export default function HomePage() {
       <section className="px-4 pb-[14px] sm:px-6 sm:pb-4">
         <div className="mx-auto max-w-[680px]">
           <BonusAnalyser />
-        </div>
-      </section>
-
-      {/* Sample verdict */}
-      <section className="px-4 pt-[14px] pb-6 sm:px-6 sm:pb-12">
-        <div className="mx-auto max-w-[680px]">
-          <VerdictCard />
         </div>
       </section>
 
