@@ -110,7 +110,7 @@ export default function LiveVerdictCard({ result }: LiveVerdictCardProps) {
       </div>
 
       {/* Traps */}
-      {result.traps?.length > 0 && (
+      {Array.isArray(result.traps) && result.traps.length > 0 && (
         <div className="p-6 border-t border-white/10">
           <h4 className="text-white/50 text-xs font-bold tracking-widest uppercase mb-4">
             Watch Out For
@@ -133,7 +133,7 @@ export default function LiveVerdictCard({ result }: LiveVerdictCardProps) {
       )}
 
       {/* Positives */}
-      {result.positives?.length > 0 && (
+      {Array.isArray(result.positives) && result.positives.length > 0 && (
         <div className="p-6 border-t border-white/10">
           <h4 className="text-white/50 text-xs font-bold tracking-widest uppercase mb-4">
             What Works
