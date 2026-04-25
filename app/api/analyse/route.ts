@@ -13,15 +13,13 @@ export async function POST(req: NextRequest) {
 
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
   if (!apiKey) {
-    const anthropicKeys = Object.keys(process.env).filter(k => k.includes("ANTHROPIC"));
-    console.error("API key missing. Env keys containing ANTHROPIC:", anthropicKeys);
+    console.error("ANTHROPIC_API_KEY is not set");
     return NextResponse.json(
-      { error: "API key not configured." },
+      { error: "Service temporarily unavailable. Please try again later." },
       { status: 500 }
     );
   }
 
-  console.log("API key prefix:", apiKey.slice(0, 7), "length:", apiKey.length);
   const client = new Anthropic({ apiKey });
 
   const systemPrompt = `You are an expert casino bonus analyst. Analyse the bonus terms and return ONLY valid JSON with this structure:
@@ -65,6 +63,15 @@ IMPORTANT RULES:
     const result = JSON.parse(cleaned);
     return NextResponse.json(result);
   } catch (err) {
+    if (err instanceof Anthropic.APIError) {
+      console.error("Anthropic API error:", err.status, err.message);
+      if (err.status === 429) {
+        return NextResponse.json(
+          { error: "Too many requests. Please wait a moment and try again." },
+          { status: 429 }
+        );
+      }
+    }
     console.error("Analysis error:", err);
     return NextResponse.json(
       { error: "Analysis failed. Please try again." },
