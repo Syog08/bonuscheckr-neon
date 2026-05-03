@@ -35,7 +35,14 @@ export default async function GuidesIndexPage() {
             How casino bonuses actually work
           </h1>
           <p className="mb-7 text-[14px] leading-[1.6] text-fg-muted sm:text-[15px]">
-            Wagering requirements, bonus types, red flags, and how to read the terms before depositing. No filler, no affiliate spam.
+            Wagering requirements, bonus types, red flags, and how to read the terms before depositing. No filler, no affiliate spam. Start with{" "}
+            <Link
+              href="/guides/sticky-vs-non-sticky-bonuses"
+              className="text-accent underline-offset-[3px] hover:underline"
+            >
+              sticky vs non-sticky bonuses
+            </Link>{" "}
+            — it changes the math on every offer below.
           </p>
 
           {guides.length === 0 ? (
