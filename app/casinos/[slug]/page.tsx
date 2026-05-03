@@ -160,6 +160,18 @@ export default async function CasinoReviewPage({
           {/* Terms at glance */}
           <TermsAtGlance terms={review.termsData} />
 
+          {/* Sticky-vs-non-sticky contextual link — strong internal signal for the bonus-type guide */}
+          <div className="my-5 rounded-md border border-line bg-bg-surface px-[14px] py-[12px] text-[13px] leading-[1.55] text-fg-muted sm:text-[14px]">
+            Not sure whether this bonus is sticky or non-sticky? Read our guide on{" "}
+            <Link
+              href="/guides/sticky-vs-non-sticky-bonuses"
+              className="text-accent underline-offset-[3px] hover:underline"
+            >
+              sticky vs non-sticky bonuses
+            </Link>{" "}
+            — it changes the math on whether the offer is worth claiming.
+          </div>
+
           {/* Pros/cons */}
           <ProsCons pros={review.pros} cons={review.cons} />
 

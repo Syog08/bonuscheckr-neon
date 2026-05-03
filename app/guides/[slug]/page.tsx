@@ -78,6 +78,23 @@ export default async function GuidePage({
     },
   };
 
+  // FAQPage schema for rich-result eligibility (only when guide has FAQs).
+  const faqSchema =
+    guide.faq.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: guide.faq.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: item.answer,
+            },
+          })),
+        }
+      : null;
+
   // Split body markdown to insert mid-article CTA after the first H2 section.
   const lines = guide.content.split("\n");
   let secondH2Index = -1;
@@ -102,6 +119,12 @@ export default async function GuidePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
 
       <div className="px-4 pt-[18px] sm:px-6">
         <div className="mx-auto max-w-[820px]">

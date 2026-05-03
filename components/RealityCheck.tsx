@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function RealityCheck() {
   return (
     <div className="border-t border-line bg-bg-subtle px-4 py-[22px] sm:px-6 sm:py-8">
@@ -15,7 +17,15 @@ export default function RealityCheck() {
           your bonus.{" "}
           <strong className="font-semibold text-fg">
             Completion rate on a 7-day timer: ~35%.
-          </strong>
+          </strong>{" "}
+          And that math doubles or halves depending on whether the bonus is{" "}
+          <Link
+            href="/guides/sticky-vs-non-sticky-bonuses"
+            className="text-accent underline-offset-[3px] hover:underline"
+          >
+            sticky or non-sticky
+          </Link>
+          .
         </p>
       </div>
     </div>
