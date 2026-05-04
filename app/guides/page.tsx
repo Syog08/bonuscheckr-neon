@@ -42,9 +42,6 @@ export default async function GuidesIndexPage() {
             >
               sticky vs non-sticky bonuses
             </Link>{" "}
-<<<<<<< Updated upstream
-            — it changes the math on every offer below.
-=======
             and{" "}
             <Link
               href="/guides/casino-bonus-wagering-requirements"
@@ -53,7 +50,6 @@ export default async function GuidesIndexPage() {
               wagering requirements
             </Link>{" "}
             — they change the math on every offer below.
->>>>>>> Stashed changes
           </p>
 
           {guides.length === 0 ? (

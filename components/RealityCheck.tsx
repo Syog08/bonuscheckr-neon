@@ -18,9 +18,6 @@ export default function RealityCheck() {
           <strong className="font-semibold text-fg">
             Completion rate on a 7-day timer: ~35%.
           </strong>{" "}
-<<<<<<< Updated upstream
-          And that math doubles or halves depending on whether the bonus is{" "}
-=======
           And that math doubles or halves depending on the{" "}
           <Link
             href="/guides/casino-bonus-wagering-requirements"
@@ -29,7 +26,6 @@ export default function RealityCheck() {
             wagering requirement
           </Link>{" "}
           and whether the bonus is{" "}
->>>>>>> Stashed changes
           <Link
             href="/guides/sticky-vs-non-sticky-bonuses"
             className="text-accent underline-offset-[3px] hover:underline"
