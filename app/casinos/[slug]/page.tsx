@@ -160,16 +160,33 @@ export default async function CasinoReviewPage({
           {/* Terms at glance */}
           <TermsAtGlance terms={review.termsData} />
 
+<<<<<<< Updated upstream
           {/* Sticky-vs-non-sticky contextual link — strong internal signal for the bonus-type guide */}
           <div className="my-5 rounded-md border border-line bg-bg-surface px-[14px] py-[12px] text-[13px] leading-[1.55] text-fg-muted sm:text-[14px]">
             Not sure whether this bonus is sticky or non-sticky? Read our guide on{" "}
+=======
+          {/* Bonus-mechanics contextual link — strong internal signal into the two pillar guides */}
+          <div className="my-5 rounded-md border border-line bg-bg-surface px-[14px] py-[12px] text-[13px] leading-[1.55] text-fg-muted sm:text-[14px]">
+            First time looking at a bonus like this? Two guides decide whether it's worth claiming:{" "}
+>>>>>>> Stashed changes
             <Link
               href="/guides/sticky-vs-non-sticky-bonuses"
               className="text-accent underline-offset-[3px] hover:underline"
             >
               sticky vs non-sticky bonuses
             </Link>{" "}
+<<<<<<< Updated upstream
             — it changes the math on whether the offer is worth claiming.
+=======
+            (deposit safety) and{" "}
+            <Link
+              href="/guides/casino-bonus-wagering-requirements"
+              className="text-accent underline-offset-[3px] hover:underline"
+            >
+              wagering requirements
+            </Link>{" "}
+            (real cost).
+>>>>>>> Stashed changes
           </div>
 
           {/* Pros/cons */}
