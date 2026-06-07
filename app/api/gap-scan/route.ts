@@ -13,6 +13,7 @@ import {
   MMA_OUTCOMES,
   MAX_ROWS,
   QUOTA_RESERVE,
+  SUSPECT_GAP_PP,
 } from '@/lib/predictions';
 
 export const maxDuration = 300;
@@ -115,6 +116,7 @@ export async function GET(req: Request) {
 
       let best: any = null;
       for (const oid of Object.keys(pmProb)) {
+        // Best price across books for this outcome + each book's devigged probability.
         const ladder: { book: string; price: number; devig: number }[] = [];
         for (const bk of bookSlugs) {
           const bf = byBook[bk]?.get(f.fixtureId);
@@ -127,13 +129,14 @@ export async function GET(req: Request) {
         if (!ladder.length) continue;
         ladder.sort((a, b) => b.price - a.price);
         const top = ladder[0];
+        // Positive gap = the crowd rates this outcome higher than the best book implies → value at that book.
         const gapPp = (pmProb[oid] - top.devig) * 100;
         if (!best || Math.abs(gapPp) > Math.abs(best.gapPp)) {
           best = { oid, gapPp, top, ladder, pmP: pmProb[oid] };
         }
       }
 
-      if (best) {
+      if (best && Math.abs(best.gapPp) <= SUSPECT_GAP_PP) {
         candidates.push({
           fixtureId: f.fixtureId,
           category: g.category,
@@ -151,6 +154,7 @@ export async function GET(req: Request) {
   candidates.sort((a, b) => Math.abs(b.gapPp) - Math.abs(a.gapPp));
   const selected = candidates.slice(0, MAX_ROWS);
 
+  // 4. Resolve participant names (singular /fixture includes names; plural does not).
   const scanId = crypto.randomUUID();
   const rows: any[] = [];
   for (const c of selected) {
@@ -184,6 +188,7 @@ export async function GET(req: Request) {
   const { error: insertErr } = await supabase.from('gap_rows').insert(rows);
   if (insertErr) return NextResponse.json({ error: insertErr.message }, { status: 500 });
 
+  // 5. Generate + publish the weekly digest.
   let digest = 'skipped';
   try {
     const { count } = await supabase
@@ -262,4 +267,3 @@ ${JSON.stringify(dataForWriter, null, 2)}`;
 
   return NextResponse.json({ scanned: rows.length, scan_id: scanId, digest });
 }
-
