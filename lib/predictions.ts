@@ -32,8 +32,12 @@ export const MMA_SPORT_ID = 20;
 export const MMA_MARKET_ID = '201';
 export const MMA_OUTCOMES: Record<string, 'p1' | 'draw' | 'p2'> = {
   '201': 'p1',
+  '202': 'p2',
   '203': 'p2',
 };
+
+// Gaps above this are almost always a stale line at one book, not a real edge. Skip them.
+export const SUSPECT_GAP_PP = 25;
 
 // Rows with |gap| below this render grey with "No edge — skip".
 export const NOISE_THRESHOLD_PP = 2;
@@ -43,4 +47,3 @@ export const MAX_ROWS = 12;
 
 // Skip the scan if fewer requests than this remain in the monthly quota.
 export const QUOTA_RESERVE = 40;
-
