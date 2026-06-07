@@ -1,0 +1,9 @@
+{
+  "crons": [
+    {
+      "path": "/api/gap-scan",
+      "schedule": "0 9 * * 1"
+    }
+  ]
+}
+
