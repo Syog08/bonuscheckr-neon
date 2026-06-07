@@ -88,8 +88,9 @@ export default async function PredictionsPage() {
             </div>
           )}
 
-          {rows.map((r) => {
+          {rows.map((r, i) => {
             const signal = Math.abs(r.gap_pp) >= NOISE_THRESHOLD_PP;
+            const lead = i === 0 && signal;
             const book = BOOKS[r.best_book];
             const ladder = (r.book_prices ?? [])
               .map((l: any) => `${l.price.toFixed(2)} ${BOOKS[l.book]?.name ?? l.book}`)
@@ -125,14 +126,25 @@ export default async function PredictionsPage() {
                     <span className="text-sm">pp</span>
                   </div>
                   {signal && book ? (
-                    <a
-                      href={book.affiliateUrl}
-                      target="_blank"
-                      rel="noopener noreferrer sponsored"
-                      className="text-xs text-emerald-400 hover:text-emerald-300"
-                    >
-                      Best price at {book.name} →
-                    </a>
+                    lead ? (
+                      <a
+                        href={book.affiliateUrl}
+                        target="_blank"
+                        rel="noopener noreferrer sponsored"
+                        className="mt-1.5 inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2.5 text-[13px] font-medium text-emerald-400 hover:bg-emerald-500/15"
+                      >
+                        Best price at {book.name} →
+                      </a>
+                    ) : (
+                      <a
+                        href={book.affiliateUrl}
+                        target="_blank"
+                        rel="noopener noreferrer sponsored"
+                        className="text-[13px] font-medium text-emerald-400 hover:text-emerald-300"
+                      >
+                        Best price at {book.name} →
+                      </a>
+                    )
                   ) : (
                     <div className="text-xs text-zinc-600">No edge — skip</div>
                   )}
@@ -199,4 +211,3 @@ export default async function PredictionsPage() {
     </main>
   );
 }
-
