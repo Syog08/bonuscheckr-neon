@@ -14,7 +14,11 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export const dynamicParams = false;
+// Render known slugs statically at build, and any new published slug on-demand
+// (e.g. the weekly Gap digest published by the cron). Re-validate hourly so
+// content edits flow through without a redeploy.
+export const dynamicParams = true;
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params,
