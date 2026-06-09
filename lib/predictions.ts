@@ -2,15 +2,15 @@
 // Adding an operator later = add one entry to BOOKS (slug must match OddsPapi's bookmaker slug).
 
 export const BOOKS: Record<string, { name: string; affiliateUrl: string }> = {
-  stake: { name: 'Stake', affiliateUrl: 'https://stake.com' }, // TODO: replace with affiliate link
-  bcgame: { name: 'BC.Game', affiliateUrl: 'https://bc.game' }, // TODO: replace with affiliate link
-  roobet: { name: 'Roobet', affiliateUrl: 'https://roobet.com' }, // TODO: replace with affiliate link
-  cloudbet: { name: 'Cloudbet', affiliateUrl: 'https://cloudbet.com' }, // TODO: replace with affiliate link
-  duelbits: { name: 'Duelbits', affiliateUrl: 'https://duelbits.com' }, // TODO: replace with affiliate link
-  rollbit: { name: 'Rollbit', affiliateUrl: 'https://rollbit.com' }, // TODO: replace with affiliate link
+  stake: { name: 'Stake', affiliateUrl: 'https://stake.com/?c=J7JXsz6z' },
+  bcgame: { name: 'BC.Game', affiliateUrl: 'https://bc.game/i-4drv0s6jf-n/' },
+  roobet: { name: 'Roobet', affiliateUrl: 'https://go.roobet.com/visit/?bta=45633&brand=roobet' },
+  cloudbet: { name: 'Cloudbet', affiliateUrl: 'https://cldbt.cloud/go/en/landing/bitcoin-casino?af_token=d9f3c17b26418a178f87530592edc874&aftm_campaign=Bonus+Review&aftm_source=Website&aftm_medium=SEO&aftm_content=Review+Page' },
+  duelbits: { name: 'Duelbits', affiliateUrl: 'https://go.duelbits.io/visit/?bta=37923&nci=5908' },
+  rollbit: { name: 'Rollbit', affiliateUrl: 'https://rollbit.com' }, // TODO: no affiliate link yet — add a Rollbit review to source one
 };
 
-export const POLYMARKET_URL = 'https://polymarket.com'; // TODO: replace with affiliate link
+export const POLYMARKET_URL = 'https://polymarket.com'; // Prediction market (not an affiliate operator)
 
 // Static scan groups. marketId: 101 = 3-way moneyline (soccer), 201 = 2-way moneyline (MMA etc.)
 export const SCAN_GROUPS: {
