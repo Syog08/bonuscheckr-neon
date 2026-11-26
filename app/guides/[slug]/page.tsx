@@ -8,6 +8,8 @@ import MidArticleCTA from "@/components/MidArticleCTA";
 import FAQBlock from "@/components/FAQBlock";
 import RelatedGuides from "@/components/RelatedGuides";
 import { getGuideBySlug, getAllGuideSlugs } from "@/lib/guides";
+import BonusCalculator from "@/components/BonusCalculator";
+import { GUIDES_WITH_CALCULATOR } from "@/lib/seo-overrides";
 
 export async function generateStaticParams() {
   const slugs = await getAllGuideSlugs();
@@ -149,6 +151,22 @@ export default async function GuidePage({
           {bodyAfterCTA && <MidArticleCTA />}
 
           {bodyAfterCTA && <MarkdownRenderer content={bodyAfterCTA} />}
+
+          {GUIDES_WITH_CALCULATOR.has(guide.slug) && (
+            <section className="mt-9">
+              <h2 className="mb-2 text-[20px] font-bold tracking-[-0.015em] text-fg sm:text-[22px]">
+                Run the numbers on your bonus
+              </h2>
+              <p className="mb-4 text-[14px] text-fg-muted">
+                Enter the terms to see total wagering, expected loss and real value.{" "}
+                <Link href="/tools/bonus-calculator" className="text-accent hover:underline">
+                  Open the full calculator
+                </Link>
+                .
+              </p>
+              <BonusCalculator />
+            </section>
+          )}
 
           <FAQBlock items={guide.faq} />
         </div>

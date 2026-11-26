@@ -1,4 +1,5 @@
 import { supabase, type CasinoReviewRow, type AuthorRow } from "./supabase";
+import { CASINO_SEO_OVERRIDES } from "./seo-overrides";
 
 export interface CasinoReview {
   slug: string;
@@ -102,8 +103,9 @@ export async function getCasinoReviewBySlug(slug: string): Promise<CasinoReview 
     slug: row.slug,
     casinoName: row.casino_name,
     casinoSlug: row.casino_slug,
-    metaTitle: row.meta_title || row.verdict_title,
-    metaDescription: row.meta_description || row.verdict_summary,
+    metaTitle: CASINO_SEO_OVERRIDES[row.slug]?.metaTitle || row.meta_title || row.verdict_title,
+    metaDescription:
+      CASINO_SEO_OVERRIDES[row.slug]?.metaDescription || row.meta_description || row.verdict_summary,
     verdict: row.verdict,
     verdictTitle: row.verdict_title,
     verdictSummary: row.verdict_summary,

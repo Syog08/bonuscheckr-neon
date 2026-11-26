@@ -1,4 +1,5 @@
 import { supabase, type GuideRow, type AuthorRow } from "./supabase";
+import { GUIDE_SEO_OVERRIDES } from "./seo-overrides";
 
 // Shape expected by the existing guide page template
 export interface Guide {
@@ -94,16 +95,37 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
   const { body, faq } = extractFAQ(row.content);
   const tldr = extractTLDR(body, row.description);
 
-  // Load 4 related guides (same primary_topic, else most recent)
-  const { data: relatedRows } = await supabase
-    .from("guides")
-    .select("slug, title, description, word_count")
-    .eq("status", "published")
-    .eq("noindex", false)
-    .neq("slug", slug)
-    .limit(4);
+  // Load 4 related guides: same primary_topic first, then most recent.
+  // Strong topical internal links help Google index thin-linked guides.
+  type RelatedRow = { slug: string; title: string; description: string | null; word_count: number | null };
+  let relatedRows: RelatedRow[] = [];
+  if (row.primary_topic) {
+    const { data } = await supabase
+      .from("guides")
+      .select("slug, title, description, word_count")
+      .eq("status", "published")
+      .eq("noindex", false)
+      .eq("primary_topic", row.primary_topic)
+      .neq("slug", slug)
+      .order("publish_date", { ascending: false })
+      .limit(4);
+    relatedRows = (data as RelatedRow[]) || [];
+  }
+  if (relatedRows.length < 4) {
+    const exclude = [slug, ...relatedRows.map((r) => r.slug)];
+    const { data } = await supabase
+      .from("guides")
+      .select("slug, title, description, word_count")
+      .eq("status", "published")
+      .eq("noindex", false)
+      .not("slug", "in", `(${exclude.map((s) => `"${s}"`).join(",")})`)
+      .not("slug", "like", "the-gap-issue-%")
+      .order("publish_date", { ascending: false })
+      .limit(4 - relatedRows.length);
+    relatedRows = [...relatedRows, ...((data as RelatedRow[]) || [])];
+  }
 
-  const related = (relatedRows || []).map((r: { slug: string; title: string; description: string | null; word_count: number | null }) => ({
+  const related = relatedRows.map((r: { slug: string; title: string; description: string | null; word_count: number | null }) => ({
     slug: r.slug,
     title: r.title,
     blurb: r.description || "",
@@ -113,8 +135,9 @@ export async function getGuideBySlug(slug: string): Promise<Guide | null> {
   return {
     slug: row.slug,
     title: row.title,
-    meta_title: row.meta_title || row.title,
-    meta_description: row.meta_description || row.description || "",
+    meta_title: GUIDE_SEO_OVERRIDES[row.slug]?.metaTitle || row.meta_title || row.title,
+    meta_description:
+      GUIDE_SEO_OVERRIDES[row.slug]?.metaDescription || row.meta_description || row.description || "",
     description: row.description,
     publish_date: row.publish_date,
     last_updated: row.last_updated,

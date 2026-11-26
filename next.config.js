@@ -8,6 +8,12 @@ const nextConfig = {
         destination: '/guides/casino-bonus-wagering-requirements',
         permanent: true,
       },
+      {
+        // Old URL still reported as 404 in Search Console.
+        source: '/guides/uk-10x-wagering-cap-2025',
+        destination: '/guides/casino-bonus-wagering-requirements',
+        permanent: true,
+      },
     ];
   },
 };
