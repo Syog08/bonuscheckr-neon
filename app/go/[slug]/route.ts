@@ -53,6 +53,17 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     return NextResponse.redirect(new URL("/casinos", req.url), 302);
   }
 
+  // Skip logging for prefetches (Next.js <Link>, browser speculation), which are not real clicks.
+  const h = req.headers;
+  const isPrefetch =
+    h.has("next-router-prefetch") ||
+    h.get("rsc") === "1" ||
+    h.get("purpose") === "prefetch" ||
+    (h.get("sec-purpose") || "").includes("prefetch");
+  if (isPrefetch) {
+    return new NextResponse(null, { status: 204, headers: { "Cache-Control": "no-store" } });
+  }
+
   const referer = req.headers.get("referer");
   const ua = req.headers.get("user-agent") || "";
   try {

@@ -11,7 +11,7 @@ export default function StickyAffiliateCTA({
 }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg-base/95 px-3 py-[10px] backdrop-blur sm:hidden">
-      <Link
+      <Link prefetch={false}
         href={affiliateUrl}
         rel="sponsored nofollow noopener"
         target="_blank"
