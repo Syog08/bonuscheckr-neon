@@ -2,8 +2,8 @@
 
 | # | Action | Type | I | C | E | Score | Status |
 |---|---|---|---|---|---|---|---|
-| 1 | "non sticky bonus" query: 1,356 impr, 0 clicks. Match intent on sticky-vs-non-sticky (definition in first 50 words, title/meta) | CTR fix | 4 | 4 | 1 | 16 | todo |
-| 2 | Internal links: link the 4 new mechanics guides (26 Nov) from older high-impression guides | links | 3 | 4 | 1 | 12 | todo |
+| 1 | "non sticky bonus" query: 1,356 impr, 0 clicks. Match intent on sticky-vs-non-sticky (definition in first 50 words, title/meta) | CTR fix | 4 | 4 | 1 | 16 | done 26 Nov (quick answer box; title was already fixed) |
+| 2 | Internal links: link the 4 new mechanics guides (26 Nov) from older high-impression guides | links | 3 | 4 | 1 | 12 | done 26 Nov (4 old guides link to the 4 new ones) |
 | 3 | Predictions page stale since 17 Aug: hide from main menu (asked Sergey, recommended) | tech | 2 | 4 | 1 | 8 | waiting on Sergey |
 | 4 | Per-casino crypto bonus analyser page template (Stake first: terms, EV, wagering math, verdict) | new page | 5 | 3 | 3 | 5 | todo |
 | 5 | Refresh 7 casino reviews (all from Apr/May 2026): verify current terms, add "last checked" date | refresh | 3 | 4 | 3 | 4 | todo |
