@@ -2,7 +2,7 @@
 -- Safe to run more than once: each insert skips if the slug already exists.
 -- author_id and primary_topic are copied from the sticky vs non-sticky guide.
 
-INSERT INTO guides (slug, title, meta_title, meta_description, description, content, author_id, publish_date, last_updated, primary_topic, target_keywords, word_count, status, noindex)
+INSERT INTO guides (slug, title, meta_title, meta_description, description, content, author_id, publish_date, last_updated, primary_topic, target_keywords, status, noindex)
 SELECT 'deposit-match-bonus-explained', 'Deposit Match Bonus Explained: What 100% up to $500 Really Means', 'Deposit Match Bonus Explained: Real Value of 100% up to $500', 'How deposit match bonuses work, why a bigger match is not always better, and how to calculate the real value with wagering and house edge. Worked examples.', 'A deposit match looks like free money. The real value depends on the cap, the wagering and what the wagering applies to. Here is the maths.',
 $md$> **TL;DR:** A deposit match adds a percentage of your deposit as bonus, up to a cap. "100% up to $500" on a $200 deposit gives $200 bonus, not $500. The real value is the bonus minus the expected loss from wagering. A 100% match with 35x on the bonus only is often worth more than a 300% match with 40x on deposit plus bonus. Always check the cap, what the wagering applies to, and whether the bonus is sticky.
 
@@ -92,12 +92,12 @@ Only after completing the wagering, and only if it is non-sticky. Sticky bonuses
 
 ### How do I calculate if a match bonus is worth it?
 Take the bonus amount and subtract total wagering multiplied by the house edge. If the result is positive or close to zero and the bonus is non-sticky, it is usually worth taking.$md$,
-g.author_id, now(), now(), g.primary_topic, ARRAY['deposit match bonus','100 deposit match bonus','how does a deposit match bonus work','match bonus casino'], 731, 'published', false
+g.author_id, now(), now(), g.primary_topic, ARRAY['deposit match bonus','100 deposit match bonus','how does a deposit match bonus work','match bonus casino'], 'published', false
 FROM guides g
 WHERE g.slug = 'sticky-vs-non-sticky-bonuses'
   AND NOT EXISTS (SELECT 1 FROM guides WHERE slug = 'deposit-match-bonus-explained');
 
-INSERT INTO guides (slug, title, meta_title, meta_description, description, content, author_id, publish_date, last_updated, primary_topic, target_keywords, word_count, status, noindex)
+INSERT INTO guides (slug, title, meta_title, meta_description, description, content, author_id, publish_date, last_updated, primary_topic, target_keywords, status, noindex)
 SELECT 'rakeback-vs-cashback', 'Rakeback vs Cashback: Which Crypto Casino Reward Is Worth More?', 'Rakeback vs Cashback: Which Is Worth More? (2026 Maths)', 'Rakeback pays on every bet, cashback only on losses. See the maths, worked examples, and which one gives crypto casino players more real value.', 'Rakeback pays a slice of the house edge on every bet. Cashback refunds part of your net losses. Here is how to compare them with real numbers.',
 $md$> **TL;DR:** Rakeback returns a share of the house edge on every bet, win or lose. Cashback refunds a percentage of your net losses over a period. For most slot players, 10% rakeback and 10% cashback pay almost the same over time, but rakeback is paid more often, has no wagering in most crypto casinos, and is not wiped out by a lucky session. Always check whether cashback carries wagering. If it does, it is worth far less than the headline number.
 
@@ -197,12 +197,12 @@ Over a long time they are worth about the same on average. Rakeback is more reli
 
 ### Does rakeback make gambling profitable?
 No. It only reduces the house edge. With a 3.5% edge and 10% rakeback you still face roughly a 3.15% edge.$md$,
-g.author_id, now(), now(), g.primary_topic, ARRAY['rakeback vs cashback','what is rakeback casino','casino cashback explained','crypto casino rakeback'], 881, 'published', false
+g.author_id, now(), now(), g.primary_topic, ARRAY['rakeback vs cashback','what is rakeback casino','casino cashback explained','crypto casino rakeback'], 'published', false
 FROM guides g
 WHERE g.slug = 'sticky-vs-non-sticky-bonuses'
   AND NOT EXISTS (SELECT 1 FROM guides WHERE slug = 'rakeback-vs-cashback');
 
-INSERT INTO guides (slug, title, meta_title, meta_description, description, content, author_id, publish_date, last_updated, primary_topic, target_keywords, word_count, status, noindex)
+INSERT INTO guides (slug, title, meta_title, meta_description, description, content, author_id, publish_date, last_updated, primary_topic, target_keywords, status, noindex)
 SELECT 'real-money-vs-bonus-money-order', 'Real Money vs Bonus Money: Which Balance Do You Play First?', 'Real Money vs Bonus Money: Which Is Used First? (2026)', 'Casinos use your balances in a set order. Learn how real money and bonus money are played, why the order changes bonus value, and how to check it.', 'The order in which a casino uses your real and bonus balance decides whether you can walk away with a win. Here is how it works.',
 $md$> **TL;DR:** Every casino plays your two balances in a fixed order. If your **real money is used first** (non-sticky bonus), you can cash out any early win and drop the bonus. If **bonus money is used first**, or both are mixed (sticky bonus), your whole balance is locked until wagering is done. The order matters more than the bonus size. Check it in the terms before you deposit.
 
@@ -288,12 +288,12 @@ You most likely requested a withdrawal while the bonus was active, which forfeit
 
 ### Is a bonus with real money first always better?
 For almost every player, yes. It gives you the option to keep early wins, which has real value.$md$,
-g.author_id, now(), now(), g.primary_topic, ARRAY['real money vs bonus money','which balance is used first casino','bonus balance explained','casino balance order'], 826, 'published', false
+g.author_id, now(), now(), g.primary_topic, ARRAY['real money vs bonus money','which balance is used first casino','bonus balance explained','casino balance order'], 'published', false
 FROM guides g
 WHERE g.slug = 'sticky-vs-non-sticky-bonuses'
   AND NOT EXISTS (SELECT 1 FROM guides WHERE slug = 'real-money-vs-bonus-money-order');
 
-INSERT INTO guides (slug, title, meta_title, meta_description, description, content, author_id, publish_date, last_updated, primary_topic, target_keywords, word_count, status, noindex)
+INSERT INTO guides (slug, title, meta_title, meta_description, description, content, author_id, publish_date, last_updated, primary_topic, target_keywords, status, noindex)
 SELECT 'reload-bonus-explained', 'Reload Bonus Explained: Are Weekly Reloads Worth Claiming?', 'Reload Bonus Explained: Are Casino Reloads Worth It? (2026)', 'What a casino reload bonus is, how it differs from a welcome bonus, and how to tell if a weekly or monthly reload has positive value. Simple maths inside.', 'Reload bonuses reward existing players for depositing again. Some are better than the welcome offer. Here is how to judge them.',
 $md$> **TL;DR:** A reload bonus is a deposit match for players who already have an account. It is usually smaller than a welcome bonus (25% to 100%) but often has lower wagering, which can make it worth more. Judge it the same way: bonus minus total wagering times house edge. Crypto casinos also use "reloads" for scheduled free balance drops, which have no deposit and are almost always worth taking.
 
@@ -365,7 +365,7 @@ Most deposit-match reloads do, often 15x to 35x. Crypto casino VIP reloads often
 
 ### How often can I claim a reload bonus?
 It depends on the casino. Weekly and monthly are common. Some VIP reloads are paid daily.$md$,
-g.author_id, now(), now(), g.primary_topic, ARRAY['reload bonus','what is a reload bonus','casino reload bonus','weekly reload bonus'], 617, 'published', false
+g.author_id, now(), now(), g.primary_topic, ARRAY['reload bonus','what is a reload bonus','casino reload bonus','weekly reload bonus'], 'published', false
 FROM guides g
 WHERE g.slug = 'sticky-vs-non-sticky-bonuses'
   AND NOT EXISTS (SELECT 1 FROM guides WHERE slug = 'reload-bonus-explained');
