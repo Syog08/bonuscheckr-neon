@@ -122,7 +122,7 @@ export default function CasinoVerdictHero(props: VerdictHeroProps) {
       </div>
 
       {/* Primary affiliate CTA */}
-      <Link
+      <Link prefetch={false}
         href={props.affiliateUrl}
         rel="sponsored nofollow noopener"
         target="_blank"
