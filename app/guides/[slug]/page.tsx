@@ -9,7 +9,7 @@ import FAQBlock from "@/components/FAQBlock";
 import RelatedGuides from "@/components/RelatedGuides";
 import { getGuideBySlug, getAllGuideSlugs } from "@/lib/guides";
 import BonusCalculator from "@/components/BonusCalculator";
-import { GUIDES_WITH_CALCULATOR } from "@/lib/seo-overrides";
+import { GUIDES_WITH_CALCULATOR, isExpiredGapIssue } from "@/lib/seo-overrides";
 
 export async function generateStaticParams() {
   const slugs = await getAllGuideSlugs();
@@ -35,6 +35,9 @@ export async function generateMetadata({
     title: guide.meta_title,
     description: guide.meta_description,
     alternates: { canonical: url },
+    ...(isExpiredGapIssue(guide.slug, guide.publish_date)
+      ? { robots: { index: false, follow: true } }
+      : {}),
     openGraph: {
       title: guide.meta_title,
       description: guide.meta_description,

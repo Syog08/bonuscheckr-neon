@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import { isExpiredGapIssue } from '@/lib/seo-overrides';
 
 // The canonical production URL. Falls back to the preview URL if env is unset.
 // Once NEXT_PUBLIC_SITE_URL is set to https://bonuscheckr.com in Vercel,
@@ -89,7 +90,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .eq('status', 'published')
     .eq('noindex', false);
 
-  const guideRoutes: MetadataRoute.Sitemap = (guides ?? []).map((g) => ({
+  const guideRoutes: MetadataRoute.Sitemap = (guides ?? [])
+    .filter((g) => !isExpiredGapIssue(g.slug, g.publish_date))
+    .map((g) => ({
     url: `${SITE_URL}/guides/${g.slug}`,
     lastModified: new Date(g.last_updated ?? g.publish_date),
     changeFrequency: 'monthly',
