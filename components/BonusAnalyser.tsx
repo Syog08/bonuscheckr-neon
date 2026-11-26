@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import LiveVerdictCard from "./LiveVerdictCard";
+import { track } from "@vercel/analytics";
 
 interface AnalysisResult {
   verdictTitle: string;
@@ -37,9 +38,11 @@ export default function BonusAnalyser() {
       });
       const data = await res.json();
       if (!res.ok) {
+        track("analyse_bonus", { result: "error" });
         setError(data.error ?? "Something went wrong. Please try again.");
         return;
       }
+      track("analyse_bonus", { result: "ok", verdict: data.verdictType ?? "unknown" });
       setResult(data);
     } catch {
       setError("Network error. Please check your connection and try again.");

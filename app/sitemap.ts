@@ -38,6 +38,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${SITE_URL}/tools/bonus-calculator`,
+      lastModified: new Date('2026-11-26'),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: `${SITE_URL}/predictions`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
