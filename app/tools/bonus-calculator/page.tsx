@@ -1,5 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+
+const CHECK_GUIDES = [
+  { slug: "low-vs-high-wagering", label: "Low vs high wagering", why: "the multiplier where a bonus turns negative" },
+  { slug: "bonus-only-vs-deposit-bonus-wagering", label: "Bonus only vs deposit + bonus wagering", why: "why the same 35x can mean double the bets" },
+  { slug: "no-max-cashout-bonuses", label: "Max cashout caps", why: "how much of a big win you are allowed to keep" },
+  { slug: "bonus-time-limits", label: "Bonus time limits", why: "what happens when the clock runs out" },
+  { slug: "bonus-abuse-voided-winnings", label: "Bonus abuse rules", why: "the play patterns that get winnings voided" },
+  { slug: "no-kyc-casino-when-verification-hits", label: "No-KYC casinos and verification", why: "when ID checks hit and how to prepare" },
+];
 import Breadcrumbs from "@/components/Breadcrumbs";
 import BonusCalculator from "@/components/BonusCalculator";
 import FAQBlock from "@/components/FAQBlock";
@@ -100,6 +109,23 @@ export default function BonusCalculatorPage() {
                 </Link>
                 .
               </li>
+            </ul>
+          </section>
+
+          <section className="mt-10">
+            <h2 className="mb-3 text-[20px] font-bold text-fg">Terms the calculator can&apos;t see</h2>
+            <p className="mb-3 text-[14px] text-fg-muted">
+              The maths assumes you follow the rules. These terms can still cost you the bonus or your winnings:
+            </p>
+            <ul className="list-disc space-y-2 pl-5 text-[14px] leading-[1.6] text-fg-muted">
+              {CHECK_GUIDES.map((g) => (
+                <li key={g.slug}>
+                  <Link href={`/guides/${g.slug}`} className="text-accent hover:underline">
+                    {g.label}
+                  </Link>
+                  : {g.why}
+                </li>
+              ))}
             </ul>
           </section>
 
