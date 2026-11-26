@@ -50,3 +50,16 @@ export const GUIDES_WITH_CALCULATOR = new Set([
   "bonus-only-vs-deposit-bonus-wagering",
   "game-contribution-wagering",
 ]);
+
+// The Gap digests are about one week's fixtures. Once the events are over the
+// page has no search value and Google marks them "crawled, not indexed", which
+// drags down how it rates the rest of the site. After this many days we keep
+// the page live for readers but tell search engines not to index it.
+export const GAP_ISSUE_INDEX_DAYS = 14;
+
+export function isExpiredGapIssue(slug: string, publishDate: string | null | undefined): boolean {
+  if (!slug.startsWith("the-gap-issue-")) return false;
+  if (!publishDate) return true;
+  const ageDays = (Date.now() - new Date(publishDate).getTime()) / 86400000;
+  return ageDays > GAP_ISSUE_INDEX_DAYS;
+}
