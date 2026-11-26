@@ -116,7 +116,8 @@ export async function getCasinoReviewBySlug(slug: string): Promise<CasinoReview 
     pros: row.pros,
     cons: row.cons,
     content: body,
-    affiliateUrl: row.affiliate_url,
+    // Route through /go/ so clicks are logged (see app/go/[slug]/route.ts).
+    affiliateUrl: `/go/${row.slug}`,
     affiliateCta: row.affiliate_cta,
     author: {
       id: authorRow?.id || "",
