@@ -128,7 +128,7 @@ export default async function PredictionsPage() {
                   {signal && book ? (
                     lead ? (
                       <a
-                        href={book.affiliateUrl}
+                        href={`/go/${r.best_book}`}
                         target="_blank"
                         rel="noopener noreferrer sponsored"
                         className="mt-1.5 inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2.5 text-[13px] font-medium text-emerald-400 hover:bg-emerald-500/15"
@@ -137,7 +137,7 @@ export default async function PredictionsPage() {
                       </a>
                     ) : (
                       <a
-                        href={book.affiliateUrl}
+                        href={`/go/${r.best_book}`}
                         target="_blank"
                         rel="noopener noreferrer sponsored"
                         className="text-[13px] font-medium text-emerald-400 hover:text-emerald-300"
