@@ -53,7 +53,7 @@ Keep subagent count small: max 3 in parallel, max 5 per run.
    load the live URL and check it renders.
 5. **Log**: append to ops/LOG.md, update ops/BACKLOG.md (done, new ideas, re-scored).
    Commit these in the same PR or a small `ops:` PR, and merge it.
-6. **Report**: one short message to Sergey (format below).
+6. **Report**: only per the reporting rules below (Mon/Thu or an issue).
 
 ## Scoring (pick highest first)
 score = impact (1-5) x confidence (1-5) / effort (1-5)
@@ -63,16 +63,18 @@ score = impact (1-5) x confidence (1-5) / effort (1-5)
   (per-casino crypto bonus analyser pages, bonus mechanics), (d) link-magnet tools.
 - Lenses: think as the bonuscheckr-seo-lead, content-director and product-lead skills.
 
-## Report format (daily, short, simple English, no em or en dashes)
-**Day N, <date>.** One line: what shipped.
-- Did: 1 to 3 bullets with links.
-- Data: clicks yesterday / 7d, anything unusual.
-- For you: only if Sergey must act (e.g. a drafted forum post). Otherwise omit.
-
-**Mondays add the weekly scorecard** vs the 90-day stop rule:
-Google clicks last 28 days (target path to 300/month by 26 Feb 2027), affiliate clicks,
-affiliate signups (ask Sergey, he owns the accounts), pages shipped this week.
-Stop rule: under 300 Google clicks/month AND 0 affiliate signups on 26 Feb 2027 means park the site.
+## Reporting to Sergey (his rule, 26 Nov 2026)
+- **No daily messages.** Daily work goes to ops/LOG.md only.
+- **Twice a week, Monday and Thursday:** one small update, simple English, no em or en dashes:
+  **Update, <date>.** One line on the main result.
+  - Shipped: 2 to 4 bullets with links.
+  - Numbers: Google clicks 7d / 28d, affiliate clicks 7d, pages shipped this week.
+  - For you: only if Sergey must act (e.g. drafted forum posts on Thursday).
+- **Monday update also carries the scorecard** vs the 90-day stop rule: Google clicks last 28 days
+  (path to 300/month by 26 Feb 2027), affiliate clicks, affiliate signups (ask Sergey, he owns the
+  accounts). Stop rule: under 300 Google clicks/month AND 0 affiliate signups on 26 Feb 2027 means park the site.
+- **Message right away only for an issue that needs him:** site down, broken prod you could not
+  fix, a needed delete or spend, an affiliate link that stopped working, a Google penalty sign.
 
 ## Known context
 - Stack: Next.js 15 on Vercel (project bonuscheckr-neon, Hobby plan), Supabase project
