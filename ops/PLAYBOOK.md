@@ -1,6 +1,7 @@
 # BonusCheckr daily growth engine: playbook
 
-This file is the brain of the daily run. The scheduled task reads it first, every day.
+This file is the brain of the daily run. The scheduled task runs workdays (Mon to Fri) at 10:03 Malta
+time, when Sergey's laptop is most likely open (his Chrome is needed for outreach), and reads this first.
 Goal: grow organic traffic to bonuscheckr.com. Owner: Sergey (money, affiliate accounts,
 anything posted under his name). Claude runs site, content and tech.
 
@@ -30,7 +31,7 @@ ops/reports/<date>-<role>.md; the lead turns findings into backlog items.
 | Keyword & SERP researcher | Mon | Find 10 to 20 winnable queries (low DR SERPs, forum results, outdated pages) in bonus mechanics and per-casino crypto bonuses. Use Semrush/Ahrefs tools if they answer, else web search. | reports/<date>-keywords.md |
 | Content strategist + writer | when a page is picked | Brief (intent, angle, outline, unique data), then writes as content-director. Facts verified on casino pages today. | the page |
 | Editor / QA | before every publish | Fact check, thin content check, AI-slop check, links, mobile render on preview. Can block. | pass/fail note |
-| Outreach poster | Tue, Wed, Fri, Sat | Posts 1 helpful forum/Q&A reply per day as BonusCheckr, per the Outreach section. | ops/OUTREACH.md |
+| Outreach poster | Tue to Fri | Posts 1 helpful forum/Q&A reply per day as BonusCheckr, per the Outreach section. | ops/OUTREACH.md |
 
 Cadence summary: **daily** = Analyst, then Lead decides, then execution (writer + QA or tech fix).
 **Monday** = also Tech audit + Competitor watcher + Keyword researcher in parallel, then Lead re-plans
@@ -61,7 +62,7 @@ Keep subagent count small: max 3 in parallel, max 5 per run.
    load the live URL and check it renders.
 5. **Log**: append to ops/LOG.md, update ops/BACKLOG.md (done, new ideas, re-scored).
    Commit these in the same PR or a small `ops:` PR, and merge it.
-6. **Outreach** (Tue, Wed, Fri, Sat only): follow the Outreach section.
+6. **Outreach** (Tue to Fri only): follow the Outreach section.
 7. **Report**: only per the reporting rules below (Mon/Thu or an issue).
 
 ## Outreach (automated, Sergey's OK 27 Nov 2026)
@@ -72,11 +73,11 @@ BonusCheckr, no real name, and always disclose "I run BonusCheckr". Reddit is bl
 |---|---|---|
 | Tue | Quora | 1 answer to an unanswered or weakly answered bonus question |
 | Wed | Bitcointalk (Gambling discussion) | 1 reply in an active bonus thread |
-| Fri | Casinomeister if approved, else Quora | 1 reply / answer |
-| Sat | Bitcointalk | 1 reply |
+| Thu | Casinomeister if approved, else Quora | 1 reply / answer |
+| Fri | Bitcointalk | 1 reply |
 
 Rules:
-- Max 1 post per day in total, max 2 per platform per week. Quality over volume.
+- Max 1 post per day in total, max 2 per platform per week. No weekend posts (no run). Quality over volume.
 - Real help first: maths, worked numbers, the exact rule to check. No hype, no "best casino" pitches,
   no affiliate (/go/) links ever. Links only to our free guides or tools, and only when they
   answer the question better than the post itself.
