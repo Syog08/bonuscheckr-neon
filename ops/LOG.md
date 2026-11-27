@@ -12,3 +12,10 @@
 - Check tomorrow: the live sticky page shows "Quick answer" (ISR cache was still old at 22:45 UTC).
 - Learned: cloud proxy blocks curl to bonuscheckr.com; use Vercel web_fetch_vercel_url.
 - Next: backlog #6 (wagering calculator landing) or #4 (Stake analyser page template).
+
+## Day 2, Fri 27 Nov 2026
+- Data: affiliate clicks 0 (1d and 7d). Prod deploy READY (#27). Sticky page now shows "Quick answer" and "Read next" (checked live).
+- Did: fixed meta titles cut off in Google on game-contribution-wagering (66 to 52 chars), good-vs-bad-bonuses (68 to 54, description 105 to 148), free-spins-vs-bonus-money DB title (code override already wins).
+- No new page: weekly cap of 4 already used (26 Nov).
+- Learned: curl to casino sites is blocked too; fact checks need the web-fetch agent or WebSearch.
+- Next: Mon 30 Nov weekly run (audit, competitors, keywords, GSC snapshot), then backlog #4 Stake analyser page.
