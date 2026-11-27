@@ -49,8 +49,10 @@ Keep subagent count small: max 3 in parallel, max 5 per run.
    - curl is blocked for casino and competitor sites too: verify facts with the web-fetch agent
      or WebSearch. If neither can reach the casino's page, don't publish the fact.
    - Guide pages already render a "Related guides" block: in-content link lists use "## Read next".
-   - Search Console: only when ops/data/gsc-*.md has a new snapshot (Sergey's computer
-     fetches it weekly). Use the newest snapshot for query/page decisions.
+   - Search Console: Supabase tables `gsc_totals` (date, clicks, impressions, ctr, position) and
+     `gsc_daily` (date, query, page, ...), filled daily 04:30 UTC by /api/gsc-sync (data lags 2 to 3 days).
+     If the newest date is older than 4 days, the sync is broken: check Vercel logs, tell Sergey if you can't fix it.
+   - Affiliate signups: Mondays, read stake.com/affiliate/referred-users in Sergey's Chrome if available.
    - Competitor/SERP check for the page you plan to write (web search).
 3. **Decide**: pick 1 to 3 actions from the backlog using the score below. Write down why.
 4. **Do**: branch from main, change, build (`npm run build`), open PR, wait for the Vercel
