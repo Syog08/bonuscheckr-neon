@@ -11,7 +11,9 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: 'The Gap — Polymarket vs Bookie Odds | BonusCheckr',
   description:
-    'Where prediction markets and crypto bookies disagree — and by how much. Vig-stripped odds comparison between Polymarket and Stake, BC.Game, Roobet, Cloudbet and more. Updated weekly.',
+    'Where prediction markets and crypto bookies disagree — and by how much. Vig-stripped odds comparison between Polymarket and Stake, BC.Game, Roobet, Cloudbet and more.',
+  // The weekly scan was retired on 27 Nov 2026. The page stays as an archive but is not indexed.
+  robots: { index: false, follow: true },
 };
 
 function fmtDate(d: string | null) {

@@ -8,7 +8,6 @@ const NAV_ITEMS = [
   { href: "/tools/bonus-calculator", label: "Calculator" },
   { href: "/guides", label: "Guides" },
   { href: "/casinos", label: "Reviews" },
-  { href: "/predictions", label: "Predictions" },
   { href: "/about", label: "About" },
 ];
 
