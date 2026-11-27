@@ -3,7 +3,7 @@
 // account (env GSC_SERVICE_ACCOUNT_JSON, the full key JSON) and upserts it into
 // Supabase tables gsc_totals (per day) and gsc_daily (per day, query, page).
 // Search Console data lags 2 to 3 days, so each run re-pulls the last 5 days.
-// Backfill once with ?days=90 (same auth header).
+// The first run backfills 90 days automatically; ?days=N overrides.
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
@@ -65,16 +65,19 @@ export async function GET(req: NextRequest) {
   if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
-  const days = Math.min(Math.max(Number(req.nextUrl.searchParams.get("days")) || 5, 1), 480);
-  const end = new Date();
-  const start = new Date(end.getTime() - days * 86400000);
-  const range = { startDate: iso(start), endDate: iso(end) };
-
   try {
     const token = await accessToken();
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
       auth: { persistSession: false },
     });
+
+    // First run (fewer than 30 days stored): backfill 90 days automatically.
+    const { count } = await supabase.from("gsc_totals").select("date", { count: "exact", head: true });
+    const fallback = (count ?? 0) < 30 ? 90 : 5;
+    const days = Math.min(Math.max(Number(req.nextUrl.searchParams.get("days")) || fallback, 1), 480);
+    const end = new Date();
+    const start = new Date(end.getTime() - days * 86400000);
+    const range = { startDate: iso(start), endDate: iso(end) };
 
     const totals = await query(token, { ...range, dimensions: ["date"] });
     const totalRows = totals.map((r) => ({
