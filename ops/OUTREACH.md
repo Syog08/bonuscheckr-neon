@@ -12,5 +12,5 @@ Rules live in ops/PLAYBOOK.md ("Outreach"). One row per post. Newest at the bott
 |---|---|---|---|
 | Bitcointalk | bonuscheckr | active, Newbie | 1 of 3 |
 | Quora | Bonuscheckr | active, credential set | 1 of 2 |
-| Casinomeister | BonusCheckr | waiting for admin approval | 0 of 3 |
+| Casinomeister | BonusCheckr | approved 27 Nov 2026. Privacy locked (no online status, no birthday, identities members only, country anonymous). Disclosure in profile: Occupation "I run BonusCheckr...", Webmastered websites bonuscheckr.com. Signature not allowed yet for new members: disclose in posts when relevant. | 0 of 3 |
 | Reddit | n/a | blocked for Claude | n/a |
