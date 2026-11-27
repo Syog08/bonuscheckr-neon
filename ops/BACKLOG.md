@@ -11,5 +11,9 @@
 | 7 | Find cause of Gap weekly cron dying 17 Aug (/api/gap-scan) or retire it | tech | 2 | 2 | 3 | 1.3 | todo |
 | 8 | Weekly: draft 2 forum/outreach posts for Sergey from backlink-outreach.md | off-site draft | 4 | 3 | 1 | 12 | weekly (Thu) |
 
+| 9 | Meta title/description length audit (titles over 60, descriptions over 160) | on-page | 2 | 4 | 1 | 8 | done 27 Nov (3 guides). Re-run monthly. |
+
+Week of 23 Nov: 4 new pages already shipped (26 Nov). Next new page earliest Mon 30 Nov.
+
 Ideas parking lot: crypto casino bonus comparison table page; "bonus EV" explainer video embed;
 schema FAQ on top 5 guides.

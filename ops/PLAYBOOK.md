@@ -46,6 +46,8 @@ Keep subagent count small: max 3 in parallel, max 5 per run.
    - Live site checks: home, /sitemap.xml, 3 random guides return 200; no broken /go/ links.
      The cloud proxy blocks curl to bonuscheckr.com: use the Vercel tool web_fetch_vercel_url
      (save output to a file and grep it). Guides use ISR (revalidate 3600), so DB edits show within 1 hour.
+   - curl is blocked for casino and competitor sites too: verify facts with the web-fetch agent
+     or WebSearch. If neither can reach the casino's page, don't publish the fact.
    - Guide pages already render a "Related guides" block: in-content link lists use "## Read next".
    - Search Console: only when ops/data/gsc-*.md has a new snapshot (Sergey's computer
      fetches it weekly). Use the newest snapshot for query/page decisions.
