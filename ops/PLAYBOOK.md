@@ -28,9 +28,9 @@ ops/reports/<date>-<role>.md; the lead turns findings into backlog items.
 | Analyst | daily | Clicks, deploy health, page status, GSC snapshot if new. Flags drops/spikes. | numbers for the log |
 | Tech SEO auditor | Mon | Crawl live site: status codes, sitemap vs indexable pages, canonicals, noindex, titles/meta length and duplicates, schema, internal links and orphans, Core Web Vitals hints, broken /go/ links. | reports/<date>-tech-audit.md |
 | Competitor watcher | Mon | casino.guru, wizardofodds, pokerlistings, lasvegasadvisor, vip-grinders + any new site ranking for our target queries. New pages, new bonus coverage, SERP features, what they lack. | reports/<date>-competitors.md |
-| Keyword & SERP researcher | Mon | Find 10 to 20 winnable queries (low DR SERPs, forum results, outdated pages) in bonus mechanics and per-casino crypto bonuses. Use Semrush/Ahrefs tools if they answer, else web search. | reports/<date>-keywords.md |
+| Keyword & SERP researcher | Mon | Refreshes ops/TOPICS.md per the Content pipeline: GSC opportunities, new autocomplete signals, forum questions, SERP check, Semrush within budget. Also runs the decay check. | reports/<date>-keywords.md + TOPICS.md |
 | Content strategist + writer | when a page is picked | Brief (intent, angle, outline, unique data), then writes as content-director. Facts verified on casino pages today. | the page |
-| Editor / QA | before every publish | Fact check, thin content check, AI-slop check, links, mobile render on preview. Can block. | pass/fail note |
+| Editor / QA | before every publish | Runs the Content pipeline quality gate checklist. Can block. | pass/fail note in the PR or LOG |
 | Outreach poster | Tue to Fri | Posts 1 helpful forum/Q&A reply per day as BonusCheckr, per the Outreach section. | ops/OUTREACH.md |
 
 Cadence summary: **daily** = Analyst, then Lead decides, then execution (writer + QA or tech fix).
@@ -64,6 +64,56 @@ Keep subagent count small: max 3 in parallel, max 5 per run.
    Commit these in the same PR or a small `ops:` PR, and merge it.
 6. **Outreach** (Tue to Fri only): follow the Outreach section.
 7. **Report**: only per the reporting rules below (Mon/Thu or an issue).
+
+## Content pipeline (Sergey's OK, 27 Nov 2026)
+Three parts. Every new page and every refresh goes through all of them.
+
+### 1. Topic queue (ops/TOPICS.md)
+- Sources, in this order of trust:
+  1. **Search Console** (`gsc_daily`): queries where we already get impressions at position 8 to 30
+     but have no page that answers them directly. Best signal we have.
+  2. **Google autocomplete** (`topic_signals`, filled Mondays 04:45 UTC by /api/topic-signals, free):
+     real phrasing people type. Read rows with status 'new', set them to 'queued', 'covered' or 'skip'.
+  3. **Forum and Quora questions** seen during outreach (log the question URL in TOPICS.md).
+  4. **Web search**: People Also Ask and "related searches" for the seed, plus who ranks top 10.
+  5. **Semrush** for volume and difficulty only (see budget below).
+- Score each topic: win chance (1 to 5: weak or forum results in top 10 = high, casino.guru and
+  big brands only = low) x demand (1 to 5: volume or impressions) x fit (1 to 5: bonus maths angle,
+  links to our calculator or a review with an affiliate link). Keep the top 15 in TOPICS.md.
+- Monday's Keyword researcher refreshes the queue. Daily runs pick from the top.
+
+### 2. Quality gate (Editor / QA must pass all, or the page does not ship)
+- [ ] **Answer first**: the first 2 lines answer the query in plain words.
+- [ ] **Real numbers**: at least one worked example with the maths shown (bonus x wagering x house edge).
+      Recompute every number yourself before publishing.
+- [ ] **Real terms**: any casino-specific fact (wagering, max bet, expiry, games) comes from the
+      casino's own T&C page fetched today, with the URL noted in the PR or LOG. If not reachable, leave it out.
+- [ ] **Something competitors lack**: a table, calculator link, comparison or edge case not in the
+      current top 5 results. Write down what it is.
+- [ ] **No generic AI text**: no "in today's world", "it's important to note", "navigating", "delve",
+      no filler intros, no repeated sentences, no unsupported "best". Read it aloud test: would a
+      bonus player trust it?
+- [ ] **Links**: 2 to 4 internal links (guides, calculator, relevant review), "## Read next" section.
+- [ ] **Meta**: title under 60 chars with the main query, meta description under 155 chars, matches the content.
+- [ ] **Responsible gambling** line where it talks about playing.
+- [ ] Renders correctly on mobile on the preview or live URL.
+
+### 3. Refresh old pages (decay check, weekly on Mondays)
+- From `gsc_daily`, compare each page's last 28 days to the 28 days before.
+- Refresh if: clicks down 30% or more (and at least 10 clicks before), or average position
+  worse by 3+ places, or impressions up but CTR under 1% (title/meta problem), or casino terms
+  older than 90 days.
+- A refresh = re-check facts, update numbers and dates, answer new queries the page now gets
+  impressions for, improve title/meta. It counts as an action, not as a new page.
+- Log the before/after numbers in LOG.md and re-check 4 weeks later.
+
+### Data budget (no money without Sergey's OK)
+| Source | Cost | Rule |
+|---|---|---|
+| Search Console, Supabase, autocomplete, web search | free | use freely |
+| Semrush | prepaid units (3,940 left on 27 Nov 2026) | max 250 units per week: `phrase_these` (10/keyword) for volume, `phrase_kdi` (50/keyword) only for the top 2 picks. Never `phrase_questions` or `phrase_related` (40/row). Stop at 1,000 units left and tell Sergey. |
+| Ahrefs | free plan, 0 units | only free tools (public domain rating). Don't call paid endpoints. |
+| Apify (scraping casino T&C pages) | paid credits | not used. Ask Sergey before any run. |
 
 ## Outreach (automated, Sergey's OK 27 Nov 2026)
 Accounts are logged in inside Sergey's Chrome (Claude in Chrome tools). All use the name
