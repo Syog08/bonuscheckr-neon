@@ -11,7 +11,8 @@ anything posted under his name). Claude runs site, content and tech.
 - Allowed without asking: code changes via PR, merge own PR after the Vercel preview is
   READY and tested; INSERT/UPDATE on Supabase content tables (guides, casino_reviews, SEO fields).
 - Needs Sergey's OK: any DELETE, DROP, TRUNCATE, destructive migration, spending money,
-  anything posted off-site or under his name (draft it instead, put it in the report).
+  any other off-site posting under his name. Exception: forum/Q&A outreach per the
+  "Outreach" section below is automated (Sergey's OK, 27 Nov 2026).
 - Never invent bonus terms. Casino facts must come from the casino's own page, fetched today.
   If you can't verify, don't publish the fact.
 - Never break production. If a merged change breaks prod, revert it the same run.
@@ -29,7 +30,7 @@ ops/reports/<date>-<role>.md; the lead turns findings into backlog items.
 | Keyword & SERP researcher | Mon | Find 10 to 20 winnable queries (low DR SERPs, forum results, outdated pages) in bonus mechanics and per-casino crypto bonuses. Use Semrush/Ahrefs tools if they answer, else web search. | reports/<date>-keywords.md |
 | Content strategist + writer | when a page is picked | Brief (intent, angle, outline, unique data), then writes as content-director. Facts verified on casino pages today. | the page |
 | Editor / QA | before every publish | Fact check, thin content check, AI-slop check, links, mobile render on preview. Can block. | pass/fail note |
-| Off-site drafter | Thu | Drafts 2 outreach/forum posts for Sergey (he posts). | in the report |
+| Outreach poster | Tue, Wed, Fri, Sat | Posts 1 helpful forum/Q&A reply per day as BonusCheckr, per the Outreach section. | ops/OUTREACH.md |
 
 Cadence summary: **daily** = Analyst, then Lead decides, then execution (writer + QA or tech fix).
 **Monday** = also Tech audit + Competitor watcher + Keyword researcher in parallel, then Lead re-plans
@@ -60,7 +61,36 @@ Keep subagent count small: max 3 in parallel, max 5 per run.
    load the live URL and check it renders.
 5. **Log**: append to ops/LOG.md, update ops/BACKLOG.md (done, new ideas, re-scored).
    Commit these in the same PR or a small `ops:` PR, and merge it.
-6. **Report**: only per the reporting rules below (Mon/Thu or an issue).
+6. **Outreach** (Tue, Wed, Fri, Sat only): follow the Outreach section.
+7. **Report**: only per the reporting rules below (Mon/Thu or an issue).
+
+## Outreach (automated, Sergey's OK 27 Nov 2026)
+Accounts are logged in inside Sergey's Chrome (Claude in Chrome tools). All use the name
+BonusCheckr, no real name, and always disclose "I run BonusCheckr". Reddit is blocked for Claude.
+
+| Day | Platform | Action |
+|---|---|---|
+| Tue | Quora | 1 answer to an unanswered or weakly answered bonus question |
+| Wed | Bitcointalk (Gambling discussion) | 1 reply in an active bonus thread |
+| Fri | Casinomeister if approved, else Quora | 1 reply / answer |
+| Sat | Bitcointalk | 1 reply |
+
+Rules:
+- Max 1 post per day in total, max 2 per platform per week. Quality over volume.
+- Real help first: maths, worked numbers, the exact rule to check. No hype, no "best casino" pitches,
+  no affiliate (/go/) links ever. Links only to our free guides or tools, and only when they
+  answer the question better than the post itself.
+- Warm-up: Bitcointalk and Casinomeister first 3 posts have no link. Quora from answer 3.
+  After warm-up, at most 1 post in 3 has a link.
+- Check ops/OUTREACH.md first: never answer the same thread twice, never repeat the same text.
+- Simple English, no em or en dashes. Quora's editor numbers lists itself: don't type "1.".
+- If someone replies to our post with a real question, one short polite answer is fine.
+  Never argue, never DM first.
+- Stop and tell Sergey right away (do not retry) if: Chrome is not logged in, a CAPTCHA,
+  a mod warning, a deleted post, a ban, or a "spam" flag. Never type passwords or codes.
+- If Chrome is not reachable (Sergey's computer off), skip, log "outreach skipped", carry on.
+- Log every post in ops/OUTREACH.md: date, platform, thread URL, link yes/no, one-line topic.
+- Monday update: one line with posts this week and any replies or referral traffic.
 
 ## Scoring (pick highest first)
 score = impact (1-5) x confidence (1-5) / effort (1-5)
@@ -76,7 +106,7 @@ score = impact (1-5) x confidence (1-5) / effort (1-5)
   **Update, <date>.** One line on the main result.
   - Shipped: 2 to 4 bullets with links.
   - Numbers: Google clicks 7d / 28d, affiliate clicks 7d, pages shipped this week.
-  - For you: only if Sergey must act (e.g. drafted forum posts on Thursday).
+  - For you: only if Sergey must act.
 - **Monday update also carries the scorecard** vs the 90-day stop rule: Google clicks last 28 days
   (path to 300/month by 26 Feb 2027), affiliate clicks, affiliate signups (ask Sergey, he owns the
   accounts). Stop rule: under 300 Google clicks/month AND 0 affiliate signups on 26 Feb 2027 means park the site.
